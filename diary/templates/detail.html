@@ -1,0 +1,17 @@
+{% extends 'base.html'%}   
+
+{% block content %}
+    <!-- content -->
+    <h2> {{post.title}} </h2> 
+    {{post.create_at}} <br>
+    {{post.content}}
+
+    <!-- CRUD btn -->
+    <br><br>
+    <a href="{% url 'diary:update' post.id %}">수정</a>
+    <a href="{% url 'diary:delete' post.id %}"
+    onclick="return confirm('Really Delete?')">
+        삭제
+    </a>
+      
+{% endblock %}
