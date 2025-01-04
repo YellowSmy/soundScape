@@ -116,6 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+#User model
+AUTH_USER_MODEL = 'accounts.Member'
+
+# Login/Logout redirect Page setting
+LOGIN_REDIRECT_URL = '/diary'
+LOGOUT_REDIRECT_URL = '/diary'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

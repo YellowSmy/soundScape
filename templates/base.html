@@ -13,8 +13,19 @@
 
     <body>
       <div>
+        <!-- navigation -->
         <a href="{% url 'diary:index' %}">HOME</a>
         <a href="{% url 'diary:create' %}">NEW</a>
+
+        <!-- LogOut/Logoin -->
+        {% if user.is_authenticated %}
+        <form action="{% url 'accounts:logout' %}" method="POST">
+          {% csrf_token %}
+          <input type="submit" value="{{user.username}} 님 logout">
+        </form>
+        {% else %}
+        <a href="{% url 'accounts:login' %}">로그인</a>
+        {% endif %}
       </div>
       <div>
         {% block content %}
