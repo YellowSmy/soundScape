@@ -52,6 +52,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #all-auth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+
+    # local
     'diary',
     'accounts',
 ]
@@ -64,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'soundScape.urls'
@@ -116,13 +125,52 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-#User model
+## allauth
+
+SITE_ID = 1
+
 AUTH_USER_MODEL = 'accounts.Member'
 
-# Login/Logout redirect Page setting
+## signup setting
+
+#using email emthod
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+#disable username method
+ACCOUNT_UNIQUE_USERNAME = False
+ACCOUNT_USERNAME_REQUIRED = False
+
+#signup settings
+ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
+
+##password find
+PASSWORD_RESET_TIMEOUT = 1800 #30분
+
+## login/logout setting 
+
+#login
+ACCOUNT_SESSION_REMEMBER = True
+SESSION_COOKIE_AGE = 1209600 # 2 week
+
+
+#logout
+
+# url
 LOGIN_REDIRECT_URL = '/diary'
 LOGOUT_REDIRECT_URL = '/diary'
 
+# authentication, find passoword
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

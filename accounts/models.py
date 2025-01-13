@@ -3,11 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 ## Users
 class Member(AbstractUser):
-    # Django Users use
+    nickname = models.CharField(max_length=20, unique=False)
 
-    # +email 인증 관련
-    email_vertified = models.BooleanField(default=False)
-    email_token = models.CharField(max_length=255, blank=True, null=True)
-    
-    # 사용자 정보
-
+    def __str__(self):
+        return self.email
