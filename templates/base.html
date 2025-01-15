@@ -2,35 +2,37 @@
 
 <!DOCTYPE html>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-        <!-- CSS -->
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <!-- Title -->
-        <title>Document</title>
-    </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- Title -->
+  <title>Document</title>
+</head>
 
-    <body>
-      <div>
-        <!-- navigation -->
-        <a href="{% url 'diary:index' %}">HOME</a>
-        <a href="{% url 'diary:create' %}">NEW</a>
+<body>
+  <div>
+    <!-- navigation -->
+    <a href="{% url 'diary:index' %}">HOME</a>
+    <a href="{% url 'diary:create' %}">NEW</a>
 
-        <!-- LogOut/Login -->
-        {% if user.is_authenticated %}
-        <form action="{% url 'account_logout' %}" method="POST">
-          {% csrf_token %}
-          <input type="submit" value="{{user.nickname}} 님 logout">
-        </form>
-        {% else %}
-        <a href="{% url 'account_login' %}">로그인</a>
-        {% endif %}
-      </div>
-      <div>
-        {% block content %}
-          
-        {% endblock %}
-      </div>  
-    </body>
+    <!-- LogOut/Login -->
+    {% if user.is_authenticated %}
+    <form action="{% url 'account_logout' %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="{{user.nickname}} 님 logout">
+    </form>
+    {% else %}
+    <a href="{% url 'account_login' %}">로그인</a>
+    {% endif %}
+    <a href="{% url 'account_signup' %}">회원가입</a>
+  </div>
+  <div>
+    {% block content %}
+
+    {% endblock %}
+  </div>
+</body>
+
 </html>

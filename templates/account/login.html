@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Title -->
+    <title>회원가입</title>
+</head>
+
+<body>
+    <h1>회원가입</h1>
+    <div>
+        <a href="{% url 'account_signup' %}">회원가입</a>
+    </div>
+
+    <div>
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {{ form }}
+
+            <button type="submit">로그인</button>
+            <br>
+            <a href="{% url 'account_reset_password' %}">비밀번호를 까먹음?</a>
+        </form>
+    </div>
+</body>
+
+</html>
