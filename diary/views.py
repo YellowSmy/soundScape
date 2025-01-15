@@ -8,20 +8,20 @@ from .forms import DiaryForm
 
 def Index(request):
     posts = Diary.objects.all()
-    return render(request, 'index.html', {'posts':posts})
+    return render(request, 'diary/index.html', {'posts':posts})
  
 
 def Detail(request, diary_id):
     post = get_object_or_404(Diary, pk=diary_id)
     print(post)
-    return render(request, 'detail.html', {'post':post})
+    return render(request, 'diary/detail.html', {'post':post})
 
 
 ## CRUD
 
 #Create
 def New(request): 
-    return render(request, 'edit.html', {'submitType': "발행"})
+    return render(request, 'diary/edit.html', {'submitType': "발행"})
 
 def Create(request): 
     #POST Request
@@ -39,12 +39,12 @@ def Create(request):
     #GET Request
     else:
         form = DiaryForm()
-        return render(request, 'edit.html', {'form' : form, 'submitType': "발행"})
+        return render(request, 'diary/edit.html', {'form' : form, 'submitType': "발행"})
 
 
 #Update
 def Edit(request):
-    return render(request, 'edit.html', {'submitType': "수정"})
+    return render(request, 'diary/edit.html', {'submitType': "수정"})
 
 def Update(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id) #content upload
