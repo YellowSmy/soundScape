@@ -5,3 +5,4 @@ class DiaryForm(forms.ModelForm):
     class Meta:
         model = Diary
         fields = ['title', 'content']
+        exclude = ['writer']

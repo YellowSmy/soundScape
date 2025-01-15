@@ -1,17 +1,19 @@
 from django.db import models
+from accounts.models import Member
 
-# Create your models here.
 
-#음악 일기 Base
+## 게시물 작성
 class Diary(models.Model):
-    #제목, 내용, 일시
+    #Content
     title = models.CharField(max_length=200)
     content = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
 
-    #댓글, 좋아요
+    #사용자 정보
+    writer = models.ForeignKey(Member, on_delete=models.CASCADE)
 
-
-    #Return
     def __str__(self):
         return self.title
+    
+
+## 댓글

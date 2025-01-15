@@ -1,17 +1,19 @@
-{% extends 'base.html'%}   
+{% extends 'base.html'%}
 
 {% block content %}
-    <!-- content -->
-    <h2> {{post.title}} </h2> 
-    {{post.create_at}} <br>
-    {{post.content}}
+<!-- content -->
+<h2> {{post.title}} </h2>
+{{post.create_at}} <br>
+{{post.writer.nickname}}<br>
+{{post.content}}
 
-    <!-- CRUD btn -->
-    <br><br>
-    <a href="{% url 'diary:update' post.id %}">수정</a>
-    <a href="{% url 'diary:delete' post.id %}"
-    onclick="return confirm('Really Delete?')">
-        삭제
-    </a>
-      
+<!-- CRUD btn -->
+<br><br>
+{% if post.writer == request.user %}
+<a href="{% url 'diary:update' post.id %}">수정</a>
+<a href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
+    삭제
+</a>
+{% endif %}
+
 {% endblock %}

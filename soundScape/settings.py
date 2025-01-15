@@ -155,6 +155,8 @@ PASSWORD_RESET_TIMEOUT = 1800 #30분
 ## login/logout setting 
 
 #login
+LOGIN_URL = '/accounts/login/'
+
 ACCOUNT_SESSION_REMEMBER = True
 SESSION_COOKIE_AGE = 1209600 # 2 week
 
