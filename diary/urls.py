@@ -28,6 +28,7 @@ urlpatterns = [
     ### COMMENT
 
     path('<int:diary_id>/comment', comment_views.Create_comment, name="comment_create"),
+    path('<int:diary_id>/comment/<int:comment_id>/update', comment_views.Update_comment, name="comment_update"),
     path('<int:diary_id>/comment/<int:comment_id>/delete', comment_views.Delete_comment, name="comment_delete"),
 
     

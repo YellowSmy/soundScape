@@ -16,6 +16,7 @@
 </a>
 {% endif %}
 
+
 <!-- COMMENT -->
 <h3>댓글</h3>
 {% if comments %}
@@ -25,7 +26,7 @@
 <ul>
     {% for comment in comments %}
     <li>
-        <p>{{ comment.writer.nickname }} - {{ comment.content }}</p>
+        <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
 
         <!-- delete -->
         {% if comment.writer == request.user %}
@@ -33,6 +34,8 @@
             {% csrf_token %}
             <input type="submit" value="delete" onclick="return confirm('really delete?')">
         </form>
+
+        <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
         {% endif %}
     </li>
     {% empty %}
@@ -49,6 +52,7 @@
     {{ comment_form }}
     <input type="submit" value="작성">
 </form>
+
 {% else %}
 <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
 {% endif %}

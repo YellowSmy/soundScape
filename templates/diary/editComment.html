@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<!-- COMMENT -->
+<!-- 차후 div 부분 ajax 처리해서 넘길것. -->
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">저장</button>
+    </form>
+</div>
+
+
+{% endblock %}

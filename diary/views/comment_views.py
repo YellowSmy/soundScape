@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
+from django.utils import timezone
+
 from ..models import Comment, Diary
-from ..forms import ComentForm
+from ..forms import CommentForm
 
 ## COMMENT
 
@@ -12,7 +14,7 @@ from ..forms import ComentForm
 @require_POST
 def Create_comment(request, diary_id):
     post = get_object_or_404(Diary, pk=diary_id)
-    comment_form = ComentForm(request.POST)
+    comment_form = CommentForm(request.POST)
 
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
@@ -23,6 +25,26 @@ def Create_comment(request, diary_id):
         return redirect('diary:detail', diary_id=post.pk)
     
   
+# Update
+## 차후 AJAX 처리할 것.
+@login_required()
+def Update_comment(request, diary_id, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+
+    if request.user == comment.writer:
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST, instance=comment)
+
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False)
+                comment.modify_date = timezone.now()
+                comment.save()
+                return redirect('diary:detail', diary_id)
+        else: 
+            comment_form = CommentForm(instance=comment)
+            return render(request, 'diary/editComment.html', {'comment':comment, 'form': comment_form}) 
+
+
 # Delete
 @login_required()
 @require_POST
@@ -32,8 +54,4 @@ def Delete_comment(request, diary_id, comment_id):
     # 사용자 본인 확인
     if request.user == comment.writer: 
         comment.delete()
-        return redirect('diary:detail', pk=diary_id)
-    
-    else:
-        return redirect('diary:detail', pk=diary_id)
-    
+        return redirect('diary:detail', diary_id)
