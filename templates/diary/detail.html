@@ -1,13 +1,13 @@
 {% extends 'base.html'%}
 
 {% block content %}
-<!-- content -->
+<!-- CONTENT -->
 <h2> {{post.title}} </h2>
 {{post.create_at}} <br>
 {{post.writer.nickname}}<br>
 {{post.content}}
 
-<!-- CRUD btn -->
+<!-- CRUD BUTTON -->
 <br><br>
 {% if post.writer == request.user %}
 <a href="{% url 'diary:update' post.id %}">수정</a>
@@ -15,5 +15,43 @@
     삭제
 </a>
 {% endif %}
+
+<!-- COMMENT -->
+<h3>댓글</h3>
+{% if comments %}
+<p>댓글 {{ comments|length }}개</p>
+{% endif %}
+
+<ul>
+    {% for comment in comments %}
+    <li>
+        <p>{{ comment.writer.nickname }} - {{ comment.content }}</p>
+
+        <!-- delete -->
+        {% if comment.writer == request.user %}
+        <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="delete" onclick="return confirm('really delete?')">
+        </form>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>No 댓글</p>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<!-- create -->
+{% if request.user.is_authenticated %}
+<form action="{% url 'diary:comment_create' post.id %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type="submit" value="작성">
+</form>
+{% else %}
+<a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
+{% endif %}
+
 
 {% endblock %}

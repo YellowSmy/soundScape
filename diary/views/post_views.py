@@ -1,22 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
-from.models import Diary
-from .forms import DiaryForm
-
-
-## Basic Page
-
-def Index(request):
-    posts = Diary.objects.all()
-    return render(request, 'diary/index.html', {'posts':posts})
- 
-
-def Detail(request, diary_id):
-    post = get_object_or_404(Diary, pk=diary_id)
-    print(post)
-    return render(request, 'diary/detail.html', {'post':post})
-
+from ..models import Diary
+from ..forms import DiaryForm
 
 ## CRUD
 
