@@ -10,7 +10,7 @@ class DiaryForm(forms.ModelForm):
     
 
 ## Comment Form
-class ComentForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['post', 'writer']
