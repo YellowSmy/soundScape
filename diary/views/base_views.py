@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
-from ..models import Diary
+from ..models import Diary, Comment
 from ..forms import CommentForm
 
 ## Base Function
@@ -17,8 +17,7 @@ def Detail(request, diary_id):
     
     #comment
     comment_form = CommentForm() # 댓글작성 Form 추가
-    comments = post.comment_set.all()
-
+    comments = Comment.objects.filter(parent=None).order_by("-created_at")
     context = {
         'post' : post,
         'comments' : comments,

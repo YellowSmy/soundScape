@@ -19,7 +19,8 @@ class Diary(models.Model):
 ## 댓글
 class Comment(models.Model):
     #구분자
-    post = models.ForeignKey(Diary, on_delete=models.CASCADE)
+    post = models.ForeignKey(Diary, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies") #대댓글 구분
     
     #Content
     content = models.CharField(max_length=200)

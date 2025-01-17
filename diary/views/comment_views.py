@@ -12,7 +12,7 @@ from ..forms import CommentForm
 # Create
 @login_required()
 @require_POST
-def Create_comment(request, diary_id):
+def Create_comment(request, diary_id, parent_id=None):
     post = get_object_or_404(Diary, pk=diary_id)
     comment_form = CommentForm(request.POST)
 
@@ -21,6 +21,14 @@ def Create_comment(request, diary_id):
         comment.post = post
         comment.writer = request.user
 
+        # 대댓글 기능
+        if parent_id: #대댓글
+            parent_comment= get_object_or_404(Comment, id=parent_id)
+            comment.parent = parent_comment
+        
+        else: #일반 댓글 처리
+            comment.parent = None
+
         comment.save()
         return redirect('diary:detail', diary_id=post.pk)
     
@@ -28,7 +36,7 @@ def Create_comment(request, diary_id):
 # Update
 ## 차후 AJAX 처리할 것.
 @login_required()
-def Update_comment(request, diary_id, comment_id):
+def Update_comment(request, diary_id, comment_id, parent_id=None):
     comment = get_object_or_404(Comment, pk=comment_id)
 
     if request.user == comment.writer:
@@ -38,6 +46,7 @@ def Update_comment(request, diary_id, comment_id):
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.modify_date = timezone.now()
+
                 comment.save()
                 return redirect('diary:detail', diary_id)
         else: 

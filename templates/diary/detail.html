@@ -30,22 +30,63 @@
 
         <!-- delete -->
         {% if comment.writer == request.user %}
-        <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST">
+        <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
             {% csrf_token %}
             <input type="submit" value="delete" onclick="return confirm('really delete?')">
         </form>
-
+        <!-- update -->
         <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
         {% endif %}
+
+
+        <!-- reply-comment -->
+        <!-- reply-comment list -->
+        <div>
+            {% if comment.replies.all %}
+            <ul>
+                {% for reply in comment.replies.all %}
+                <li>
+                    <p>>> {{ reply.writer.nickname }} ({{ reply.created_at }}) - {{ reply.content }}</p>
+
+                    <!-- delete -->
+                    {% if reply.writer == request.user %}
+                    <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST"
+                        style="display: inline;">
+                        {% csrf_token %}
+                        <input type="submit" value="delete" onclick="return confirm('really delete?')">
+                    </form>
+                    <!-- update -->
+                    <a href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <!-- reply-comment form -->
+        <div style="display: none;">
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'diary:comment_reply' post.id comment.id %}" method="POST">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="submit" value="작성">
+            </form>
+            {% endif %}
+        </div>
     </li>
+
     {% empty %}
     <p>No 댓글</p>
+
     {% endfor %}
 </ul>
 
 <hr>
 
-<!-- create -->
+<!-- comment create form -->
 {% if request.user.is_authenticated %}
 <form action="{% url 'diary:comment_create' post.id %}" method="POST">
     {% csrf_token %}
