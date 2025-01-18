@@ -1,4 +1,10 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/detail.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <!-- CONTENT -->
@@ -38,6 +44,9 @@
         <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
         {% endif %}
 
+        <!-- reply-button -->
+        <button class="reply-button" parent-id="{{ comment.id }}">답글</button>
+
 
         <!-- reply-comment -->
         <!-- reply-comment list -->
@@ -67,9 +76,10 @@
         <hr>
 
         <!-- reply-comment form -->
-        <div style="display: none;">
+        <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
             {% if request.user.is_authenticated %}
-            <form action="{% url 'diary:comment_reply' post.id comment.id %}" method="POST">
+            <form class="reply-form-{{ comment.id }}" method="POST"
+                action="{% url 'diary:comment_reply' post.id comment.id %}">
                 {% csrf_token %}
                 {{ comment_form }}
                 <input type="submit" value="작성">
@@ -97,6 +107,5 @@
 {% else %}
 <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
 {% endif %}
-
 
 {% endblock %}

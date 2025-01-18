@@ -27,14 +27,10 @@ urlpatterns = [
 
     ### COMMENT
 
-    #create
     path('<int:diary_id>/comment', comment_views.Create_comment, name="comment_create"),
     path('<int:diary_id>/comment/<int:parent_id>', comment_views.Create_comment, name='comment_reply'), #reply-comment
 
-    #update
     path('<int:diary_id>/comment/<int:comment_id>/update', comment_views.Update_comment, name="comment_update"),
-     # reply-comment
-
     path('<int:diary_id>/comment/<int:comment_id>/delete', comment_views.Delete_comment, name="comment_delete"),
 
     
