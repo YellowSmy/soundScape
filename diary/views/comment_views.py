@@ -30,7 +30,7 @@ def Create_comment(request, diary_id, parent_id=None):
             comment.parent = None
 
         comment.save()
-        return redirect('diary:detail', diary_id=post.pk)
+        return redirect('diary:detail', diary_id)
     
   
 # Update

@@ -17,7 +17,7 @@ def Detail(request, diary_id):
     
     #comment
     comment_form = CommentForm() # 댓글작성 Form 추가
-    comments = Comment.objects.filter(parent=None).order_by("-created_at")
+    comments = Comment.objects.filter(post=post, parent=None).order_by("-created_at")
     context = {
         'post' : post,
         'comments' : comments,
