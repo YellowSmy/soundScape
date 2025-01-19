@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import Member
+from accounts.models import Profile
 
 
 ## 게시물 작성
@@ -10,7 +10,7 @@ class Diary(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
     #사용자 정보
-    writer = models.ForeignKey(Member, on_delete=models.CASCADE)
+    writer = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -25,7 +25,7 @@ class Comment(models.Model):
     #Content
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    writer = models.ForeignKey(Member, on_delete=models.CASCADE)
+    writer = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.content

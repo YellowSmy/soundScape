@@ -1,15 +1,27 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Member
+from .models import Member, Profile
 
 ## 회원가입 Form 수정 (from allauth userCreationForm)
 class SignupForm(UserCreationForm):
     class Meta:
         model = Member
-        fields = ['nickname']
+        fields = ['email', 'password1', 'password2']
 
     def signup(self, request, user):
-        user.nickname = self.cleaned_data['nickname']
         user.save()
+
+
+## Profile Form
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['nickname', 'profile_img', 'bio']
+
+        labels = {
+            'nickname' : "닉네임",
+            'profile_img' : "프로필 이미지",
+            'bio' : "자기소개..",
+        }
     

@@ -19,7 +19,7 @@ def Create(request):
         
         if form.is_valid():
             diary = form.save(commit=False)
-            diary.writer = request.user
+            diary.writer = request.user.profile
             
             diary.save()
             return redirect('diary:index')
@@ -40,7 +40,7 @@ def Edit(request):
 def Update(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id) #content upload
 
-    if request.user == diary.writer:
+    if request.user == diary.writer.user:
         #POST Request
         if request.method == "POST":
             form = DiaryForm(request.POST, instance=diary)
@@ -67,7 +67,7 @@ def Delete(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id)
 
     # 사용자 본인 확인
-    if request.user == diary.writer: 
+    if request.user.profile == diary.writer: 
         diary.delete()
         return redirect('diary:index')
     

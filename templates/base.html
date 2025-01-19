@@ -16,7 +16,7 @@
 
   {% endblock %}
   <!-- Title -->
-  <title>Document</title>
+  <title>Main</title>
 </head>
 
 <body>
@@ -26,11 +26,15 @@
     <a href="{% url 'diary:create' %}">NEW</a>
 
     <!-- LogOut/Login -->
-    {% if user.is_authenticated %}
+    {% if request.user.is_authenticated %}
     <form action="{% url 'account_logout' %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="{{user.nickname}} 님 logout">
+      <input type="submit" value="{{user_profile.nickname}} 님 logout">
     </form>
+
+    <!-- profile -->
+    <a href="{% url 'accounts:profile' user_profile.user_id %}">프로필 드가자</a>
+
     {% else %}
     <a href="{% url 'account_login' %}">로그인</a>
     <a href="{% url 'account_signup' %}">회원가입</a>

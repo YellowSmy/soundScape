@@ -19,7 +19,7 @@ def Create_comment(request, diary_id, parent_id=None):
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)
         comment.post = post
-        comment.writer = request.user
+        comment.writer = request.user.profile
 
         # 대댓글 기능
         if parent_id: #대댓글
@@ -39,7 +39,7 @@ def Create_comment(request, diary_id, parent_id=None):
 def Update_comment(request, diary_id, comment_id, parent_id=None):
     comment = get_object_or_404(Comment, pk=comment_id)
 
-    if request.user == comment.writer:
+    if request.user.profile == comment.writer:
         if request.method == 'POST':
             comment_form = CommentForm(request.POST, instance=comment)
 
@@ -61,6 +61,6 @@ def Delete_comment(request, diary_id, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
 
     # 사용자 본인 확인
-    if request.user == comment.writer: 
+    if request.user.profile == comment.writer: 
         comment.delete()
         return redirect('diary:detail', diary_id)
