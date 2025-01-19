@@ -33,8 +33,9 @@
     </form>
     {% else %}
     <a href="{% url 'account_login' %}">로그인</a>
-    {% endif %}
     <a href="{% url 'account_signup' %}">회원가입</a>
+    {% endif %}
+
   </div>
   <div>
     {% block content %}

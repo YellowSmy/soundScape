@@ -164,8 +164,8 @@ SESSION_COOKIE_AGE = 1209600 # 2 week
 #logout
 
 # url
-LOGIN_REDIRECT_URL = '/diary'
-LOGOUT_REDIRECT_URL = '/diary'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # authentication, find passoword
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
