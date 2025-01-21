@@ -18,7 +18,7 @@ def Profile_new(request):
     profile = request.user.profile
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = ProfileForm(request.POST,request.FILES, instance=profile)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.save()
@@ -35,12 +35,13 @@ def Profile_modify(request, user_id):
 
     if request.user == profile.user:
         #POST Request
-        if request.method == "POST":
-            form = ProfileForm(request.POST, instance=profile)
+        if request.method == "POST" and request.FILES.get('profile_img'):
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
             
             if form.is_valid():
                 profile = form.save(commit=False)
                 profile.save()
+
                 return redirect('accounts:profile', user_id=profile.user_id)
             
             else:

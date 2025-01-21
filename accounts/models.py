@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from utils.file_upload import user_dir_path
+
 ## Authenticate Model
 class Member(AbstractUser):
 
@@ -16,7 +18,7 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=20, unique=False)
 
     # unnecessary info.
-    profile_img = models.ImageField(blank=True, upload_to='images/', default='images/default.png')
+    profile_img = models.ImageField(blank=True, upload_to=user_dir_path, default='profiles/images/default.png')
     bio = models.CharField(max_length=200, null=True)
 
     # follow
