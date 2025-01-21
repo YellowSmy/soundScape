@@ -12,4 +12,7 @@ urlpatterns = [
 
     #follow
     path('<int:user_id>/follow/', views.Follow, name="follow"),
+
+    #delete/deactivate
+    path('profile/delete/<int:user_id>', views.User_delete, name="user_delete"),
 ]

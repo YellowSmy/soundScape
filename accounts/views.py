@@ -9,7 +9,24 @@ from .forms import ProfileForm
 ## Base
 def Profile_detail(request, user_id):
         profile = get_object_or_404(Profile, user_id=user_id)
-        return render(request, "profile/profile.html", {'profile': profile})
+        
+        #follower 정보 처리
+        active_followers = profile.followers.filter(user__is_active=True)
+        active_followings = profile.followings.filter(user__is_active=True)
+
+        context = {
+            'profile' : profile,
+            'active_followers' : active_followers,
+            'active_followings' : active_followings,
+
+        }
+
+        #탈퇴 회원 처리
+        if profile.user.is_active == False:
+            return render(request, 'profile/deactivated.html')
+        
+        
+        return render(request, "profile/profile.html", context)
 
 
 # New
@@ -57,18 +74,29 @@ def Profile_modify(request, user_id):
 @login_required()
 @require_POST
 def Follow(request, user_id):
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user_id=user_id)
+    profile = Profile.objects.get(user_id=user_id)
 
-        if profile.user != request.user: #상대방 != 나 
-            #unfollow
-            if profile.followers.filter(user_id=request.user.profile.user_id).exists():
+    if profile.user != request.user: #상대방 != 나 
+        #unfollow
+        if profile.followers.filter(user_id=request.user.profile.user_id).exists():
                 profile.followers.remove(request.user.profile) 
 
-            #follow
-            else:
-                profile.followers.add(request.user.profile)
+        #follow
+        else:
+            profile.followers.add(request.user.profile)
 
         return redirect('accounts:profile', user_id)    
     
     return redirect('accounts:profile', user_id)
+
+
+## Delete (Soft-delete)
+@login_required()
+def User_delete(request, user_id):
+    profile = get_object_or_404(Profile, user_id=user_id)
+    
+    if request.user == profile.user:
+        user = request.user.profile.user
+        user.is_active = False
+        user.save()
+        return redirect('diary:index')  
