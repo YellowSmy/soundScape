@@ -1,4 +1,5 @@
 {% load static %}
+{% load allauth %}
 
 <!DOCTYPE html>
 
@@ -19,7 +20,7 @@
     </div>
 
     <div>
-        <form method="post" action="{% url 'account_signup' %}">
+        <form method="post" action="{{ action_url }}">
             {% csrf_token %}
             {{ form }}
 

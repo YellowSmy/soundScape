@@ -1,12 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/preview.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 <div>
     <h5>프로필</h5>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        <div>
+            {{ form.nickname }} <br>
+            {{ form.bio }}
+        </div>
+        <br>
+        <div>
+            {% if form.instance.profile_img %}
+            <div>
+                <!--only update image-->
+                currentimage: <br>
+                <img src="{{ form.instance.profile_img.url }}" alt="이미지"><br>
+            </div>
+            {% endif %}
 
+            <div>
+                {{ form.profile_img }} <br>
+                <img id="preview">
+            </div>
+        </div>
+        <br>
         <button type="submit">{{submitText}}</button>
     </form>
 </div>

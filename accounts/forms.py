@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import ImageField, FileInput
+
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import Member, Profile
@@ -15,6 +17,7 @@ class SignupForm(UserCreationForm):
 
 ## Profile Form
 class ProfileForm(forms.ModelForm):
+    profile_img = ImageField(widget=FileInput)
     class Meta:
         model = Profile
         fields = ['nickname', 'profile_img', 'bio']

@@ -11,7 +11,7 @@
 <h2> {{post.title}} </h2>
 {{post.create_at}} <br>
 {{post.writer.nickname}}<br>
-<a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필 드가자</a><br>
+<a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>
 {{post.content}}
 
 <!-- CRUD BUTTON -->
@@ -34,7 +34,7 @@
     {% for comment in comments %}
     <li>
         <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
-        <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필 드가자</a>
+        <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
         <!-- delete -->
         {% if comment.writer == request.user.profile %}
         <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
@@ -57,6 +57,7 @@
                 {% for reply in comment.replies.all %}
                 <li>
                     <p>>> {{ reply.writer.nickname }} ({{ reply.created_at }}) - {{ reply.content }}</p>
+                    <a href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">남의 프로필</a>
 
                     <!-- delete -->
                     {% if reply.writer == request.user %}

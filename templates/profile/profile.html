@@ -21,8 +21,8 @@
 
 <!--followers-->
 <div>
-    <p>Follow : {{ profile.followings.all|length }}</p>
-    <p>Following {{ profile.followers.all|length }} </p>
+    <p>Follow : {{ active_followers|length }}</p>
+    <p>Following {{ active_followings|length }} </p>
 
     {% if request.user != profile.user %}
     <form action="{% url 'accounts:follow' profile.user_id %}" method="POST">
@@ -41,16 +41,21 @@
 <div>
     <h6>팔로워 목록</h6>
     <ul>
-        {% for follower in profile.followers.all %}
-        <li>{{ follower.nickname }}</li>
+        {% for follower in active_followers %}
+        <p>{{ follower.nickname }}</p>
+        <a href="{% url 'accounts:profile' follower.user_id%}">남의 프로필</a>
+        <br>
+
         {% empty %}
         <li>팔로워가 없습니다.</li>
         {% endfor %}
     </ul>
     <h6>팔로잉 목록</h6>
     <ul>
-        {% for following in profile.followings.all %}
+        {% for following in active_followings %}
         <li>{{ following.nickname }}</li>
+        <a href="{% url 'accounts:profile' following.user_id%}">남의 프로필</a>
+        <br>
         {% empty %}
         <li>팔로잉이 없습니다.</li>
         {% endfor %}
@@ -59,6 +64,8 @@
 
 {% if profile.user == request.user %}
 <a href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
+
+<a href="{% url 'accounts:user_delete' profile.user_id %}" onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
 {% endif %}
 
 {% endblock%}
