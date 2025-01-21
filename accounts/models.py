@@ -19,5 +19,8 @@ class Profile(models.Model):
     profile_img = models.ImageField(blank=True, upload_to='images/', default='images/default.png')
     bio = models.CharField(max_length=200, null=True)
 
+    # follow
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+
     def __str__(self):
         return self.nickname
