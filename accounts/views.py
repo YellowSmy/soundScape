@@ -6,11 +6,27 @@ from django.views.decorators.http import require_POST
 from .models import Profile
 from .forms import ProfileForm
 
-# Create
+## Base
 def Profile_detail(request, user_id):
         profile = get_object_or_404(Profile, user_id=user_id)
         return render(request, "profile/profile.html", {'profile': profile})
 
+
+# New
+@login_required()
+def Profile_new(request):
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.save()
+            return redirect('accounts:profile', user_id=profile.user_id)
+        
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile/profile_edit.html', {'form': form, 'submitText' : "생성"})
 
 # Update
 @login_required()
@@ -33,10 +49,10 @@ def Profile_modify(request, user_id):
         #GET Request
         else:
             form = ProfileForm(instance=profile)
-            return render(request, 'profile/editProfile.html', {'form' : form }) 
+            return render(request, 'profile/profile_edit.html', {'form' : form, 'submitText' : "수정"}) 
 
 
-# Follow
+## Follow
 @login_required()
 @require_POST
 def Follow(request, user_id):
