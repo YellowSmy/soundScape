@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h5>프로필</h5>
+</div>
+
+<!--my profile-->
+<div>
+    {% if profile.profile_img %}
+    <div>
+        <img class="image" src="{{ profile.profile_img.url }}" alt="">
+    </div>
+    {% endif %}
+
+    <div>
+        <p>{{ profile.nickname }}</p>
+        <p>{{ profile.bio }}</p>
+    </div>
+</div>
+
+<!--followers-->
+<div>
+    <p>Follow : {{ profile.followings.all|length }}</p>
+    <p>Following {{ profile.followers.all|length }} </p>
+
+    {% if request.user != profile.user %}
+    <form action="{% url 'accounts:follow' profile.user_id %}" method="POST">
+        {% csrf_token %}
+
+        {% if request.user.profile in profile.followers.all %}
+        <input type="submit" value="UnFollow">
+        {% else %}
+        <input type="submit" value="Follow">
+        {% endif %}
+    </form>
+    {% endif %}
+</div>
+
+<!-- followers list -->
+<div>
+    <h6>팔로워 목록</h6>
+    <ul>
+        {% for follower in profile.followers.all %}
+        <li>{{ follower.nickname }}</li>
+        {% empty %}
+        <li>팔로워가 없습니다.</li>
+        {% endfor %}
+    </ul>
+    <h6>팔로잉 목록</h6>
+    <ul>
+        {% for following in profile.followings.all %}
+        <li>{{ following.nickname }}</li>
+        {% empty %}
+        <li>팔로잉이 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% if profile.user == request.user %}
+<a href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
+{% endif %}
+
+{% endblock%}

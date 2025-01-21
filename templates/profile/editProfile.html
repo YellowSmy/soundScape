@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h5>프로필</h5>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+
+        <button type="submit">저장</button>
+    </form>
+</div>
+
+{% endblock %}
