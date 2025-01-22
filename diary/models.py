@@ -10,7 +10,10 @@ class Diary(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
 
     #사용자 정보
-    writer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="diaries")
+
+    #like
+    like_users = models.ManyToManyField(Profile, related_name="like_diary")
 
     def __str__(self):
         return self.title
@@ -25,7 +28,7 @@ class Comment(models.Model):
     #Content
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    writer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
 
     def __str__(self):
         return self.content

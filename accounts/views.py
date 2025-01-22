@@ -6,6 +6,8 @@ from django.views.decorators.http import require_POST
 from .models import Profile
 from .forms import ProfileForm
 
+from diary.models import Diary, Comment
+
 ## Base
 def Profile_detail(request, user_id):
         profile = get_object_or_404(Profile, user_id=user_id)
@@ -14,11 +16,17 @@ def Profile_detail(request, user_id):
         active_followers = profile.followers.filter(user__is_active=True)
         active_followings = profile.followings.filter(user__is_active=True)
 
+        #content
+        diaries = profile.diaries.all()
+        comments = profile.comments.all()
+
         context = {
             'profile' : profile,
             'active_followers' : active_followers,
             'active_followings' : active_followings,
-
+            
+            'diaries': diaries,
+            'comments': comments,
         }
 
         #탈퇴 회원 처리

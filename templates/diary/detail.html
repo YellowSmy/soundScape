@@ -8,106 +8,148 @@
 
 {% block content %}
 <!-- CONTENT -->
-<h2> {{post.title}} </h2>
-{{post.create_at}} <br>
-{{post.writer.nickname}}<br>
-<a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>
-{{post.content}}
+<div>
 
-<!-- CRUD BUTTON -->
-<br><br>
-{% if post.writer == request.user.profile %}
-<a href="{% url 'diary:update' post.id %}">수정</a>
-<a href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
-    삭제
-</a>
-{% endif %}
+    <h2> {{post.title}} </h2>
+    {{post.create_at}} <br>
+    {{post.writer.nickname}}<br>
+    <a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>
+    {{post.content}}
 
+    <!-- CRUD BUTTON -->
+    <br><br>
+    {% if post.writer == request.user.profile %}
+    <a href="{% url 'diary:update' post.id %}">수정</a>
+    <a href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
+        삭제
+    </a>
+    {% endif %}
+</div>
+
+<!-- LIKE -->
+<div>
+    <!--like number-->
+    <div>
+        <p>{{ post.like_users.count }}명이 좋아합니다.</p>
+    </div>
+
+    <!--like btn-->
+    <div>
+        <form action="{% url 'diary:like' post.id %}" method="POST">
+            {% csrf_token %}
+
+            {% if request.user.profile in post.like_users.all %}
+            <input type="submit" value="UnLike">
+            {% else %}
+            <input type="submit" value="Like">
+            {% endif %}
+        </form>
+    </div>
+
+    <!--like list-->
+    <div>
+        <h6>좋아요 목록</h6>
+        <ul>
+            {% for like in post.like_users.all %}
+            <p>{{ like.nickname }}</p>
+            <a href="{% url 'accounts:profile' like.user_id %}">남의 프로필</a>
+            <br>
+
+            {% empty %}
+            <li> ㅠㅠ </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 <!-- COMMENT -->
-<h3>댓글</h3>
-{% if comments %}
-<p>댓글 {{ comments|length }}개</p>
-{% endif %}
+<div>
+    <h3>댓글</h3>
+    {% if comments %}
+    <p>댓글 {{ comments|length }}개</p>
+    {% endif %}
 
-<ul>
-    {% for comment in comments %}
-    <li>
-        <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
-        <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
-        <!-- delete -->
-        {% if comment.writer == request.user.profile %}
-        <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
-            {% csrf_token %}
-            <input type="submit" value="delete" onclick="return confirm('really delete?')">
-        </form>
-        <!-- update -->
-        <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
-        {% endif %}
-
-        <!-- reply-button -->
-        <button class="reply-button" parent-id="{{ comment.id }}">답글</button>
-
-
-        <!-- reply-comment -->
-        <!-- reply-comment list -->
-        <div>
-            {% if comment.replies.all %}
-            <ul>
-                {% for reply in comment.replies.all %}
-                <li>
-                    <p>>> {{ reply.writer.nickname }} ({{ reply.created_at }}) - {{ reply.content }}</p>
-                    <a href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">남의 프로필</a>
-
-                    <!-- delete -->
-                    {% if reply.writer == request.user %}
-                    <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST"
-                        style="display: inline;">
-                        {% csrf_token %}
-                        <input type="submit" value="delete" onclick="return confirm('really delete?')">
-                    </form>
-                    <!-- update -->
-                    <a href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-
-        <hr>
-
-        <!-- reply-comment form -->
-        <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
-            {% if request.user.is_authenticated %}
-            <form class="reply-form-{{ comment.id }}" method="POST"
-                action="{% url 'diary:comment_reply' post.id comment.id %}">
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
+            <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
+            <!-- delete -->
+            {% if comment.writer == request.user.profile %}
+            <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
                 {% csrf_token %}
-                {{ comment_form }}
-                <input type="submit" value="작성">
+                <input type="submit" value="delete" onclick="return confirm('really delete?')">
             </form>
+            <!-- update -->
+            <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
             {% endif %}
-        </div>
-    </li>
 
-    {% empty %}
-    <p>No 댓글</p>
+            <!-- reply-button -->
+            <button class="reply-button" parent-id="{{ comment.id }}">답글</button>
 
-    {% endfor %}
-</ul>
+
+            <!-- reply-comment -->
+            <!-- reply-comment list -->
+            <div>
+                {% if comment.replies.all %}
+                <ul>
+                    {% for reply in comment.replies.all %}
+                    <li>
+                        <p>>> {{ reply.writer.nickname }} ({{ reply.created_at }}) - {{ reply.content }}</p>
+                        <a href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">남의 프로필</a>
+
+                        <!-- delete -->
+                        {% if reply.writer == request.user %}
+                        <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST"
+                            style="display: inline;">
+                            {% csrf_token %}
+                            <input type="submit" value="delete" onclick="return confirm('really delete?')">
+                        </form>
+                        <!-- update -->
+                        <a href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <hr>
+
+            <!-- reply-comment form -->
+            <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
+                {% if request.user.is_authenticated %}
+                <form class="reply-form-{{ comment.id }}" method="POST"
+                    action="{% url 'diary:comment_reply' post.id comment.id %}">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <input type="submit" value="작성">
+                </form>
+                {% endif %}
+            </div>
+        </li>
+
+        {% empty %}
+        <p>No 댓글</p>
+
+        {% endfor %}
+    </ul>
+</div>
 
 <hr>
 
-<!-- comment create form -->
-{% if request.user.is_authenticated %}
-<form action="{% url 'diary:comment_create' post.id %}" method="POST">
-    {% csrf_token %}
-    {{ comment_form }}
-    <input type="submit" value="작성">
-</form>
+<!--Form-->
+<div>
+    <!-- comment create form -->
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'diary:comment_create' post.id %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" value="작성">
+    </form>
 
-{% else %}
-<a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
-{% endif %}
-
+    {% else %}
+    <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
+    {% endif %}
+</div>
 {% endblock %}

@@ -29,3 +29,14 @@ def Detail(request, diary_id):
     return render(request, 'diary/detail.html', context)
 
    
+## Like
+@login_required()
+def Like(request, diary_id):
+    diary = get_object_or_404(Diary, pk=diary_id)
+    if diary.like_users.filter(user_id=request.user.profile.user_id).exists():
+        diary.like_users.remove(request.user.profile)
+                                
+    else:
+        diary.like_users.add(request.user.profile)
+    
+    return redirect('diary:detail', diary_id)

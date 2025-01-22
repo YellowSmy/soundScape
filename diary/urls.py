@@ -11,28 +11,25 @@ urlpatterns = [
 
     path('', base_views.Index, name="index"),
     path('detail/<int:diary_id>',base_views.Detail, name="detail"),
+    ## Like
+    path('like/<int:diary_id>', base_views.Like, name="like"),
+
 
     ##CRUD
     #create
     path('new/', post_views.New, name="new"),
     path('create/', post_views.Create, name="create"),
-
     #update
     path('edit/',post_views.Edit, name="edit"),
     path('update/<int:diary_id>/',post_views.Update, name="update"),
-
     #delete
     path('delete/<int:diary_id>/', post_views.Delete, name="delete"),
 
 
     ### COMMENT
-
     path('<int:diary_id>/comment', comment_views.Create_comment, name="comment_create"),
     path('<int:diary_id>/comment/<int:parent_id>', comment_views.Create_comment, name='comment_reply'), #reply-comment
-
+    
     path('<int:diary_id>/comment/<int:comment_id>/update', comment_views.Update_comment, name="comment_update"),
-    path('<int:diary_id>/comment/<int:comment_id>/delete', comment_views.Delete_comment, name="comment_delete"),
-
-    
-    
+    path('<int:diary_id>/comment/<int:comment_id>/delete', comment_views.Delete_comment, name="comment_delete"),   
 ]

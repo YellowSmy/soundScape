@@ -19,53 +19,93 @@
     </div>
 </div>
 
-<!--followers-->
+<!--follow-->
 <div>
-    <p>Follow : {{ active_followers|length }}</p>
-    <p>Following {{ active_followings|length }} </p>
+    <!--follow number-->
+    <div>
+        <p>Follow : {{ active_followers.count }}</p>
+        <p>Following {{ active_followings.count }} </p>
+    </div>
 
-    {% if request.user != profile.user %}
-    <form action="{% url 'accounts:follow' profile.user_id %}" method="POST">
-        {% csrf_token %}
+    <!--follow btn-->
+    <div>
+        {% if request.user != profile.user %}
+        <form action="{% url 'accounts:follow' profile.user_id %}" method="POST">
+            {% csrf_token %}
 
-        {% if request.user.profile in profile.followers.all %}
-        <input type="submit" value="UnFollow">
-        {% else %}
-        <input type="submit" value="Follow">
+            {% if request.user.profile in profile.followers.all %}
+            <input type="submit" value="UnFollow">
+            {% else %}
+            <input type="submit" value="Follow">
+            {% endif %}
+        </form>
         {% endif %}
-    </form>
+    </div>
+
+
+    <!-- followers list -->
+    <div>
+        <h6>팔로워 목록</h6>
+        <ul>
+            {% for follower in active_followers %}
+            <p>{{ follower.nickname }}</p>
+            <a href="{% url 'accounts:profile' follower.user_id%}">남의 프로필</a>
+            <br>
+
+            {% empty %}
+            <li>팔로워가 없습니다.</li>
+            {% endfor %}
+        </ul>
+        <h6>팔로잉 목록</h6>
+        <ul>
+            {% for following in active_followings %}
+            <li>{{ following.nickname }}</li>
+            <a href="{% url 'accounts:profile' following.user_id%}">남의 프로필</a>
+            <br>
+            {% empty %}
+            <li>팔로잉이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!--Content list-->
+<div>
+    <!--diary-->
+    <div style="display: inline;">
+        <h6>작성글 목록</h6>
+        <ul>
+            {% for diary in diaries %}
+            <li>
+                <a href="{% url 'diary:detail' diary.id %}">{{ diary }}</a>
+            </li>
+            {% empty %}
+            <li>작성글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!--comment-->
+    <div style="display: inline;">
+        <h6>작성댓글 목록</h6>
+        <ul>
+            {% for comment in comments %}
+            <li>
+                <a href="{% url 'diary:detail' comment.post.id %}">{{ comment }}</a> (글제목: {{ comment.post }})
+            </li>
+            {% empty %}
+            <li>작성댓글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!--edit-->
+<div>
+    {% if profile.user == request.user %}
+    <a href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
+
+    <a href="{% url 'accounts:user_delete' profile.user_id %}" onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
     {% endif %}
 </div>
-
-<!-- followers list -->
-<div>
-    <h6>팔로워 목록</h6>
-    <ul>
-        {% for follower in active_followers %}
-        <p>{{ follower.nickname }}</p>
-        <a href="{% url 'accounts:profile' follower.user_id%}">남의 프로필</a>
-        <br>
-
-        {% empty %}
-        <li>팔로워가 없습니다.</li>
-        {% endfor %}
-    </ul>
-    <h6>팔로잉 목록</h6>
-    <ul>
-        {% for following in active_followings %}
-        <li>{{ following.nickname }}</li>
-        <a href="{% url 'accounts:profile' following.user_id%}">남의 프로필</a>
-        <br>
-        {% empty %}
-        <li>팔로잉이 없습니다.</li>
-        {% endfor %}
-    </ul>
-</div>
-
-{% if profile.user == request.user %}
-<a href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
-
-<a href="{% url 'accounts:user_delete' profile.user_id %}" onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
-{% endif %}
 
 {% endblock%}
