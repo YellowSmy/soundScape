@@ -8,10 +8,6 @@ from ..forms import DiaryForm
 
 #Create
 @login_required()
-def New(request): 
-    return render(request, 'diary/edit.html', {'submitType': "발행"})
-
-@login_required()
 def Create(request): 
     #POST Request
     if request.method == "POST":
@@ -24,19 +20,14 @@ def Create(request):
             diary.save()
             return redirect('diary:index')
         
-        else:
-           return redirect('diary:index')
-    
     #GET Request
     else:
         form = DiaryForm()
-        return render(request, 'diary/edit.html', {'form' : form, 'submitType': "발행"})
+        context = {'form' : form,'submitType': "발행"}
+        return render(request, 'diary/edit.html', context)
 
 
 #Update
-def Edit(request):
-    return render(request, 'diary/edit.html', {'submitType': "수정"})
-
 def Update(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id) #content upload
 

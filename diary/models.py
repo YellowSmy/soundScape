@@ -8,13 +8,16 @@ class Diary(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+    #music info
+    video_id = models.CharField(max_length=50, null=True)
+    thumbnail_url = models.URLField(null=True)
 
     #사용자 정보
     writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="diaries")
 
     #like
-    like_users = models.ManyToManyField(Profile, related_name="like_diary")
-
+    like_users = models.ManyToManyField(Profile, related_name="like_diary", blank=True)
+ 
     def __str__(self):
         return self.title
     
@@ -28,7 +31,7 @@ class Comment(models.Model):
     #Content
     content = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
+    writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments", blank=True)
 
     def __str__(self):
         return self.content

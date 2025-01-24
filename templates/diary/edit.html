@@ -1,12 +1,50 @@
-{% extends 'base.html'%}   
+{% extends 'base.html'%}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'js/music/searchMusic.js' %}"></script>
+<script src="{% static 'js/music/musicPlayer.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-    <!-- form -->
-     <form method="POST">
-        {% csrf_token %}
+<!--video-->
 
-        {{ form }}
+<!--search-->
+<div id="youtube-result">
+   <input type="text" id="search-input" placeholder="비디오 제목 + 가수">
+   <button id="search-btn">Search</button>
+</div>
 
-        <input type="submit" value="{{submitType}}">
-     </form>
+<!--player-->
+<div id="music-player" style="display: none;">
+   <!--video-->
+   {% if form.instance.video_id %}
+   <div id="player" video-id="{{form.instance.video_id}}"></div>
+
+   {% else %}
+   <div id="player" video-id=""></div>
+   {% endif %}
+
+   <br>
+
+   <!--player-->
+   <div>
+      <button id="playBtn">>></button>
+      <button id="mute">음소거</button>
+      <div class="slider">
+         <input id="volume" type="range" min="1" max="100" value="50">
+         <input id="seeker" type="range" value="0">
+      </div>
+   </div>
+</div>
+
+
+<!-- form -->
+<form method="POST">
+   {% csrf_token %}
+   {{ form }}
+
+   <input type="submit" value="{{submitType}}">
+</form>
 {% endblock %}

@@ -5,9 +5,14 @@ from .models import Diary, Comment
 class DiaryForm(forms.ModelForm):
     class Meta:
         model = Diary
-        fields = ['title', 'content']
+        fields = ['title', 'content','video_id', 'thumbnail_url']
         exclude = ['writer']
-    
+
+        widgets = {
+            "video_id": forms.HiddenInput(),
+            "thumbnail_url": forms.HiddenInput()
+        }
+
 
 ## Comment Form
 class CommentForm(forms.ModelForm):

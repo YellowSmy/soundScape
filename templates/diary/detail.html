@@ -4,19 +4,38 @@
 {% block scripts %}
 {{ block.super }}
 <script src="{% static 'js/detail.js' %}"></script>
+<script src="{% static 'js/music/musicPlayer.js' %}"></script>
 {% endblock %}
 
 {% block content %}
 <!-- CONTENT -->
 <div>
-
+    <!--information-->
     <h2> {{post.title}} </h2>
     {{post.create_at}} <br>
     {{post.writer.nickname}}<br>
     <a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>
+
+    <!--music-->
+    <div s>
+        <!--video-->
+        <div id="player" video-id="{{ post.video_id }}"></div> <br>
+
+        <!--player-->
+        <div>
+            <button id="playBtn">>></button>
+            <button id="mute">음소거</button>
+            <div class="slider">
+                <input id="volume" type="range" min="1" max="100" value="50">
+                <input id="seeker" type="range" value="0">
+            </div>
+        </div>
+    </div>
+
+    <!--main content-->
     {{post.content}}
 
-    <!-- CRUD BUTTON -->
+    <!-- CRUD button -->
     <br><br>
     {% if post.writer == request.user.profile %}
     <a href="{% url 'diary:update' post.id %}">수정</a>
