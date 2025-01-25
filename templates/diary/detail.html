@@ -12,6 +12,7 @@
 <div>
     <!--information-->
     <h2> {{post.title}} </h2>
+    <h3>{{post.music_title}} - {{ post.artist }}</h3>
     {{post.create_at}} <br>
     {{post.writer.nickname}}<br>
     <a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>

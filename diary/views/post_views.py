@@ -12,7 +12,7 @@ def Create(request):
     #POST Request
     if request.method == "POST":
         form = DiaryForm(request.POST)
-        
+
         if form.is_valid():
             diary = form.save(commit=False)
             diary.writer = request.user.profile

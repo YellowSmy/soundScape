@@ -22,23 +22,28 @@ def get_secret(setting, secrets=secrets):
 
 
 def get_youtube_id_and_thumbnail (serach_word):
+    results = []
     try:
         API_KEY = get_secret("YOUTUBE_DATA_API_KEY")
         youtube = build('youtube', 'v3', developerKey=API_KEY)
 
         serach_response = youtube.search().list(
-            q=str(serach_word), order="relevance", part="snippet", maxResults=2).execute()
+            q=str(serach_word), order="relevance", part="snippet", maxResults=3).execute()
         
-        videoId = serach_response['items'][0]['id']['videoId']
-        thumbnail = serach_response['items'][0]['snippet']['thumbnails']['high']['url']
+        for i in range(3):
+            videoId = serach_response['items'][i]['id']['videoId']
+            title = serach_response['items'][i]['snippet']['title']
+            thumbnail = serach_response['items'][i]['snippet']['thumbnails']['high']['url']
 
-        musicAttr = {
-            "videoId" : videoId,
-            "thumbnail" : thumbnail
-        }
+            musicAttr = {
+                "videoId" : videoId,
+                "title" : title,
+                "thumbnail" : thumbnail
+            }
+
+            results.append(musicAttr)
         
-        return musicAttr
+        return results
 
     except:
         raise Exception()
-    

@@ -31,7 +31,6 @@ function initializePlayer(videoId) {
 
 function onYouTubeIframeAPIReady() {
     youtube_video_id = document.getElementById('player').getAttribute("video-id");
-    console.log(youtube_video_id)
 
     if (youtube_video_id) {
         initializePlayer(youtube_video_id);
@@ -44,6 +43,13 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {
     musicControl()
+}
+
+function loadNewVideo(videoId){
+    player.destroy();
+    playerParams.videoId = vidID;
+    player = new YT.Player('player', playerParams);
+
 }
 
 

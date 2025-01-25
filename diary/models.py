@@ -5,12 +5,15 @@ from accounts.models import Profile
 ## 게시물 작성
 class Diary(models.Model):
     #Content
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=50)
     content = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
+
     #music info
     video_id = models.CharField(max_length=50, null=True)
     thumbnail_url = models.URLField(null=True)
+    music_title = models.CharField(max_length=50, default="알 수 없음")
+    artist = models.CharField(max_length=30, default="알 수 없음")
 
     #사용자 정보
     writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="diaries")
