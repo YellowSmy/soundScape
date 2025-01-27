@@ -20,8 +20,9 @@
     <div>
         <form method="post" action="{% url 'account_login' %}">
             {% csrf_token %}
-            {{ form }}
-
+            {{ form.login }}
+            {{ form.password }}
+            {{ form.remember }}
             <button type="submit">로그인</button>
             <br>
             <a href="{% url 'account_reset_password' %}">비밀번호를 까먹음?</a>

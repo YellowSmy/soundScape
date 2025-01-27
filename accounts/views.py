@@ -104,7 +104,7 @@ def User_delete(request, user_id):
     profile = get_object_or_404(Profile, user_id=user_id)
     
     if request.user == profile.user:
-        user = request.user.profile.user
+        user = request.user
         user.is_active = False
         user.save()
         return redirect('diary:index')  

@@ -50,13 +50,13 @@ def Update(request, diary_id):
                     diary.is_temp_save = True
                     diary.save()
                     return redirect('diary:index')
-
+                
                 if diary.is_temp_save == True:
                     diary.is_temp_save = False
                     diary.create_at = timezone.now()
-                    
-                    diary.save()
-                    return redirect('diary:detail', diary_id=diary.pk)
+
+                diary.save()
+                return redirect('diary:detail', diary_id=diary.pk)
             
             else:
                 return redirect('diary:index')
@@ -76,7 +76,7 @@ def Delete(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id)
 
     # 사용자 본인 확인
-    if request.user.profile == diary.writer: 
+    if request.user == diary.writer.user: 
         diary.delete()
         return redirect('diary:index')
     

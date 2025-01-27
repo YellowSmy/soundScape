@@ -7,7 +7,7 @@ class Diary(models.Model):
     #Content
     title = models.CharField(max_length=50)
     content = models.TextField(blank=True)
-    create_at = models.DateTimeField(auto_now_add=False)
+    create_at = models.DateTimeField(auto_now_add=True)
     is_temp_save = models.BooleanField(default=False)
 
     #music info
@@ -32,7 +32,7 @@ class Comment(models.Model):
     
     #Content
     content = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments", blank=True)
 
     def __str__(self):

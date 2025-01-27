@@ -3,7 +3,7 @@
 {% block content %}
 
 {% for diary in diarys %}
-<a href="{% url 'diary:update' diary.id %}">{{ diary.title }}</a>
+<a href="{% url 'diary:update' diary.id %}">{{ diary.title }} - {{ diary.create_at}} 작성</a>
 {% endfor %}
 
 {{ none }}

@@ -38,7 +38,7 @@
 
     <!-- CRUD button -->
     <br><br>
-    {% if post.writer == request.user.profile %}
+    {% if post.writer.user == request.user %}
     <a href="{% url 'diary:update' post.id %}">수정</a>
     <a href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
         삭제
@@ -95,7 +95,7 @@
             <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
             <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
             <!-- delete -->
-            {% if comment.writer == request.user.profile %}
+            {% if comment.writer.user == request.user %}
             <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="submit" value="delete" onclick="return confirm('really delete?')">
@@ -119,7 +119,7 @@
                         <a href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">남의 프로필</a>
 
                         <!-- delete -->
-                        {% if reply.writer == request.user %}
+                        {% if reply.writer.user == request.user %}
                         <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST"
                             style="display: inline;">
                             {% csrf_token %}
