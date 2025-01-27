@@ -45,13 +45,6 @@ function onPlayerStateChange(event) {
     musicControl()
 }
 
-function loadNewVideo(videoId){
-    player.destroy();
-    playerParams.videoId = vidID;
-    player = new YT.Player('player', playerParams);
-
-}
-
 
 //music control tool
 function musicControl() {

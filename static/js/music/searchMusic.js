@@ -79,7 +79,7 @@ function loadVideo(videoId) {
       initializePlayer(videoId);
    }
    else {
-      player.loadVideoById(videoId);
+      player.cueVideoById(videoId);
    }
 
    resultDiv.style.display = "none";
