@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-
-
+from django.http import JsonResponse
 
 from ..models import Diary, Comment
 from ..forms import CommentForm
@@ -43,8 +42,10 @@ def Like(request, diary_id):
 @login_required()
 def Temp_save(request):
     diarys = Diary.objects.filter(is_temp_save=True, writer=request.user.profile)
-    if diarys:
-        return render(request, 'diary/temp_save.html', {"diarys": diarys})
-    
+    if diarys.exists():
+        html_content = render(request, 'diary/temp_save.html', {'diarys': diarys})
+        return JsonResponse({"html": html_content.content.decode('utf-8')})
+
     else:
-        return redirect("diary:create")
+        html_content = render(request, 'diary/temp_save.html', {'none': "임시 저장 글이 없습니다"})
+        return JsonResponse({"html": html_content.content.decode('utf-8')})

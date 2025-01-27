@@ -5,8 +5,7 @@
 {{ block.super }}
 <script src="{% static 'js/music/musicPlayer.js' %}"></script>
 <script src="{% static 'js/music/searchMusic.js' %}"></script>
-
-<script src="{% static %}"></script>
+<script src="{% static 'js/editor/tempSave.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -52,5 +51,6 @@
 </form>
 
 <!--temp-save-->
-<a href="{% url 'diary:temp' %}">임시저장 목록</a>
+<button id="temp-save-list-btn">Search</button>
+<div id="temp-save-list"></div>
 {% endblock %}
