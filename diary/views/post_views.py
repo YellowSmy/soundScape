@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
+from django.utils import timezone
+
 from ..models import Diary
 from ..forms import DiaryForm
 
@@ -16,18 +18,23 @@ def Create(request):
         if form.is_valid():
             diary = form.save(commit=False)
             diary.writer = request.user.profile
-            
+            diary.create_at = timezone.now()
+            #temp-save
+            if 'temp-save' in request.POST:
+                diary.is_temp_save = True
+
             diary.save()
             return redirect('diary:index')
         
     #GET Request
     else:
         form = DiaryForm()
-        context = {'form' : form,'submitType': "발행"}
+        context = {'form' : form }
         return render(request, 'diary/edit.html', context)
 
 
 #Update
+@login_required()
 def Update(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id) #content upload
 
@@ -38,8 +45,18 @@ def Update(request, diary_id):
             
             if form.is_valid():
                 diary = form.save(commit=False)
-                diary.save()
-                return redirect('diary:detail', diary_id=diary.pk)
+                #temp-save
+                if 'temp-save' in request.POST:
+                    diary.is_temp_save = True
+                    diary.save()
+                    return redirect('diary:index')
+
+                if diary.is_temp_save == True:
+                    diary.is_temp_save = False
+                    diary.create_at = timezone.now()
+                    
+                    diary.save()
+                    return redirect('diary:detail', diary_id=diary.pk)
             
             else:
                 return redirect('diary:index')
@@ -47,13 +64,14 @@ def Update(request, diary_id):
         #GET Request
         else:
             form = DiaryForm(instance=diary)
-            return render(request, 'diary/edit.html', {'form' : form, 'submitType': "수정"}) 
+            return render(request, 'diary/edit.html', {'form' : form}) 
         
     else:
         return redirect('diary:index')
 
 
 #Delete
+@login_required()
 def Delete(request, diary_id):
     diary = get_object_or_404(Diary, pk=diary_id)
 

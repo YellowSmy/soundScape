@@ -45,5 +45,5 @@ def get_youtube_id_and_thumbnail (serach_word):
         
         return results
 
-    except:
-        raise Exception()
+    except HttpError as e:
+        print("An HTTP error %d occurred:\n%s"% (e.resp.status, e.content))

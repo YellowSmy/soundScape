@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 from utils.file_upload import user_dir_path
 
-## Authenticate Model
+## Authenticate Model from django.User
 class Member(AbstractUser):
 
     def __str__(self):
@@ -14,14 +14,11 @@ class Profile(models.Model):
     #Authenticate info.
     user = models.OneToOneField(Member, on_delete=models.CASCADE)
 
-    # necessary
-    nickname = models.CharField(max_length=20, unique=False)
+    # profile
+    nickname = models.CharField(max_length=20, unique=False) #necessary
 
-    # unnecessary info.
     profile_img = models.ImageField(blank=True, upload_to=user_dir_path, default='profiles/images/default.png')
     bio = models.CharField(max_length=200, null=True)
-
-    # follow
     followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
 
     def __str__(self):

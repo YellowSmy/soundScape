@@ -5,6 +5,8 @@
 {{ block.super }}
 <script src="{% static 'js/music/musicPlayer.js' %}"></script>
 <script src="{% static 'js/music/searchMusic.js' %}"></script>
+
+<script src="{% static %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,11 +14,11 @@
 
 <!--search-->
 <div>
-   <input type="text" id="search-input" placeholder="비디오 제목 + 가수">
+   <input type="text" id="search-input" placeholder="비디오 제목 + 가수" autocomplete="off">
    <button id="search-btn">Search</button>
-</div>
 
-<div id="youtube-result" style="display: flex; overflow-x: auto;"></div>
+   <div id="youtube-result" style="display: flex; overflow-x: auto;"></div>
+</div>
 
 <!--player-->
 <div id="music-player" style="display: none;">
@@ -41,13 +43,14 @@
    </div>
 </div>
 
-
 <!-- form -->
-<form method="POST">
+<form method="POST" autocomplete="off">
    {% csrf_token %}
    {{ form }}
-
-
-   <input type="submit" value="{{submitType}}">
+   <input type="submit" value="발행">
+   <input type="submit" id="temp-save" name="temp-save" value="임시저장">
 </form>
+
+<!--temp-save-->
+<a href="{% url 'diary:temp' %}">임시저장 목록</a>
 {% endblock %}

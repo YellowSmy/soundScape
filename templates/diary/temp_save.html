@@ -1,0 +1,8 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+{% for diary in diarys %}
+<a href="{% url 'diary:update' diary.id %}">{{ diary.title }}</a>
+{% endfor %}
+{% endblock %}

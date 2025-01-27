@@ -12,6 +12,7 @@ urlpatterns = [
     path('', base_views.Index, name="index"),
     path('detail/<int:diary_id>',base_views.Detail, name="detail"),
     path('like/<int:diary_id>', base_views.Like, name="like"), #like
+    path('temp/', base_views.Temp_save, name="temp"),
 
     ## CRUD
     path('search', music_views.Search, name="search"), #search music 

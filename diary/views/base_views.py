@@ -6,13 +6,10 @@ from django.contrib.auth.decorators import login_required
 from ..models import Diary, Comment
 from ..forms import CommentForm
 
-from accounts.models import Profile
-from utils.context_processors import user_profile
-
 ## Base Function
 
 def Index(request):
-    posts = Diary.objects.all()
+    posts = Diary.objects.filter(is_temp_save=False)
     return render(request, 'diary/index.html', {'posts':posts})
 
 def Detail(request, diary_id):
@@ -40,3 +37,14 @@ def Like(request, diary_id):
         diary.like_users.add(request.user.profile)
     
     return redirect('diary:detail', diary_id)
+
+
+## Temp-save list
+@login_required()
+def Temp_save(request):
+    diarys = Diary.objects.filter(is_temp_save=True, writer=request.user.profile)
+    if diarys:
+        return render(request, 'diary/temp_save.html', {"diarys": diarys})
+    
+    else:
+        return redirect("diary:create")
