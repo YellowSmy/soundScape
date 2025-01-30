@@ -1,18 +1,19 @@
 from django.urls import path
 
-from . import views
+from .views import profile_views, guest_views
 
 app_name = "accounts"
 
 urlpatterns = [
-    #Profile
-    path('profile/new', views.Profile_new, name="new_profile"),
-    path('profile/<int:user_id>', views.Profile_detail, name="profile"),
-    path('profile/modify/<int:user_id>', views.Profile_modify, name="profile_modify"),
+    ##Guest
+    path('guest/', guest_views.Guest, name="guest"),
 
-    #follow
-    path('<int:user_id>/follow/', views.Follow, name="follow"),
+    ##Profile
+    path('profile/new', profile_views.Profile_new, name="new_profile"),
+    path('profile/<int:user_id>', profile_views.Profile_detail, name="profile"),
+    path('profile/modify/<int:user_id>', profile_views.Profile_modify, name="profile_modify"),
 
-    #delete/deactivate
-    path('profile/delete/<int:user_id>', views.User_delete, name="user_delete"),
+    path('<int:user_id>/follow/', profile_views.Follow, name="follow"),#follow
+
+    path('profile/delete/<int:user_id>', profile_views.User_delete, name="user_delete"), #delete/deactivate
 ]

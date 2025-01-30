@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 from django.utils import timezone
+from django.contrib import messages
 
 from ..models import Diary
 from ..forms import DiaryForm
@@ -11,7 +12,15 @@ from ..forms import DiaryForm
 #Create
 @login_required()
 def Create(request): 
-    #POST Request
+    if request.user.is_guest == True:
+        guest_diary_count = Diary.objects.filter(writer=request.user.profile, is_temp_save=False).count()
+        print(guest_diary_count)
+
+        if guest_diary_count > 3:
+            messages.info(request, "게스트의 글쓰기는 3개까지 가능해요.", extra_tags='guest_message')
+            return redirect("diary:index")
+   
+        #POST Request
     if request.method == "POST":
         form = DiaryForm(request.POST)
 
@@ -25,7 +34,7 @@ def Create(request):
 
             diary.save()
             return redirect('diary:index')
-        
+          
     #GET Request
     else:
         form = DiaryForm()

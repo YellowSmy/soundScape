@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 
-
-from .models import Profile
-from .forms import ProfileForm
+from ..models import Profile
+from ..forms import ProfileForm
 
 from diary.models import Diary, Comment
 
@@ -41,41 +41,48 @@ def Profile_detail(request, user_id):
 @login_required()
 def Profile_new(request):
     profile = request.user.profile
-
-    if request.method == 'POST':
-        form = ProfileForm(request.POST,request.FILES, instance=profile)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.save()
-            return redirect('accounts:profile', user_id=profile.user_id)
-        
+    if profile.user.is_guest == True:
+        messages.info(request, "기능을 이용하려면 로그인하세요!", extra_tags='guest_message')
+        return redirect("diary:index")
     else:
-        form = ProfileForm(instance=profile)
-    return render(request, 'profile/profile_edit.html', {'form': form, 'submitText' : "생성"})
+        if request.method == 'POST':
+            form = ProfileForm(request.POST,request.FILES, instance=profile)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.save()
+                return redirect('accounts:profile', user_id=profile.user_id)
+            
+        else:
+            form = ProfileForm(instance=profile)
+        return render(request, 'profile/profile_edit.html', {'form': form, 'submitText' : "생성"})
+
 
 # Update
 @login_required()
 def Profile_modify(request, user_id):
     profile = get_object_or_404(Profile, user_id=user_id)
+    if profile.user.is_guest == True:
+            messages.info(request, "기능을 이용하려면 로그인하세요!", extra_tags='guest_message')
+            return redirect("diary:index")
+    else:
+        if request.user == profile.user:
+            #POST Request
+            if request.method == "POST" and request.FILES.get('profile_img'):
+                form = ProfileForm(request.POST, request.FILES, instance=profile)
+                
+                if form.is_valid():
+                    profile = form.save(commit=False)
+                    profile.save()
 
-    if request.user == profile.user:
-        #POST Request
-        if request.method == "POST" and request.FILES.get('profile_img'):
-            form = ProfileForm(request.POST, request.FILES, instance=profile)
+                    return redirect('accounts:profile', user_id=profile.user_id)
+                
+                else:
+                    return redirect('accounts:profile')
             
-            if form.is_valid():
-                profile = form.save(commit=False)
-                profile.save()
-
-                return redirect('accounts:profile', user_id=profile.user_id)
-            
+            #GET Request
             else:
-                return redirect('accounts:profile')
-        
-        #GET Request
-        else:
-            form = ProfileForm(instance=profile)
-            return render(request, 'profile/profile_edit.html', {'form' : form, 'submitText' : "수정"}) 
+                form = ProfileForm(instance=profile)
+                return render(request, 'profile/profile_edit.html', {'form' : form, 'submitText' : "수정"}) 
 
 
 ## Follow

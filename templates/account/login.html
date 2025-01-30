@@ -15,6 +15,10 @@
     <h1>로그인</h1>
     <div>
         <a href="{% url 'account_signup' %}">회원가입</a>
+        <form method="POST" action="{% url 'accounts:guest' %}">
+            {% csrf_token %}
+            <input type="submit" value="게스트 로그인">
+        </form>
     </div>
 
     <div>

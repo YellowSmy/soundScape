@@ -24,9 +24,8 @@ def auto_delete_file_on_save(sender, instance, **kwargs):
         
         if old_obj.profile_img != instance.profile_img:
             if old_obj.profile_img and os.path.isfile(old_obj.profile_img.path):
-                # 기존 파일 경로와 user_dir_path에서 생성된 경로를 비교
                 old_file_path = old_obj.profile_img.path
-                new_file_path = user_dir_path(instance, instance.profile_img.name)  # 새 경로
+                new_file_path = user_dir_path(instance, instance.profile_img.name)  
 
-                if old_file_path != new_file_path:  # 경로가 다르면 삭제
+                if old_file_path != new_file_path:
                     os.remove(old_file_path)
