@@ -14,8 +14,7 @@ from ..forms import DiaryForm
 def Create(request): 
     if request.user.is_guest == True:
         guest_diary_count = Diary.objects.filter(writer=request.user.profile, is_temp_save=False).count()
-        print(guest_diary_count)
-
+        
         if guest_diary_count > 3:
             messages.info(request, "게스트의 글쓰기는 3개까지 가능해요.", extra_tags='guest_message')
             return redirect("diary:index")
