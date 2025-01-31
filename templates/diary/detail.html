@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load filters %}
 
 {% block scripts %}
 {{ block.super }}
@@ -34,7 +35,7 @@
     </div>
 
     <!--main content-->
-    {{post.content}}
+    {{ post.content|mark }}
 
     <!-- CRUD button -->
     <br><br>

@@ -1,11 +1,18 @@
 {% extends 'base.html'%}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+{% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 <script src="{% static 'js/music/musicPlayer.js' %}"></script>
 <script src="{% static 'js/music/searchMusic.js' %}"></script>
 <script src="{% static 'js/editor/tempSave.js' %}"></script>
+
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="{% static 'js/editor/contentEditor.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -43,9 +50,20 @@
 </div>
 
 <!-- form -->
-<form method="POST" autocomplete="off">
+<form id="content-form" method="POST" autocomplete="off">
    {% csrf_token %}
-   {{ form }}
+   <div>
+      {{ form.title }}
+      <div id="editor"></div>
+      <textarea name="content" id="toast-editor" style="display: none;">{{ form.content.value }}</textarea>
+   </div>
+
+   <div id="hidden-form">
+      {{ form.video_id }}
+      {{ form.thumbnail_url }}
+      {{ form.music_title }}
+      {{ form.artist }}
+   </div>
    <input type="submit" value="발행">
    <input type="submit" id="temp-save" name="temp-save" value="임시저장">
 </form>
