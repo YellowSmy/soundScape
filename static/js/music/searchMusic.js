@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
    }
 
    //search
-   document.getElementById('search-btn').addEventListener("click", () => {
+   document.getElementById('search-btn').addEventListener("click", (event) => {
        const query = document.getElementById("search-input").value;
 
        if (query.trim() == "") {
-          alert("필수 입력 사항입니다.");
+          alert("필수 입력 사항입니다."); 
           return;
        }
 
@@ -107,3 +107,15 @@ function showBtn(event) {
       button.style.display = 'none';
    }
 }
+
+
+//temp-save validation
+document.addEventListener("DOMContentLoaded", () => {
+   document.getElementById('content-form').addEventListener('submit', function (event) {
+      const searchInput = document.getElementById('search-input');
+      if (!searchInput.value.trim()) {
+         event.preventDefault(); // 폼 제출 방지
+         alert('검색 입력은 필수입니다!');
+      }
+   });
+});

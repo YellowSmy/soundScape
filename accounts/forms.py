@@ -17,7 +17,7 @@ class SignupForm(UserCreationForm):
 
 ## Profile Form
 class ProfileForm(forms.ModelForm):
-    profile_img = ImageField(widget=FileInput)
+    profile_img = ImageField(widget=FileInput, required=False)
     class Meta:
         model = Profile
         fields = ['nickname', 'profile_img', 'bio']
@@ -27,4 +27,7 @@ class ProfileForm(forms.ModelForm):
             'profile_img' : "프로필 이미지",
             'bio' : "자기소개..",
         }
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.profile_img:
+            self.fields['profile_img'].initial = self.instance.profile_img

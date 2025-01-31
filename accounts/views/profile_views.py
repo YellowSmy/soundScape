@@ -6,7 +6,6 @@ from django.contrib import messages
 from ..models import Profile
 from ..forms import ProfileForm
 
-from diary.models import Diary, Comment
 
 ## Base
 def Profile_detail(request, user_id):
@@ -67,18 +66,17 @@ def Profile_modify(request, user_id):
     else:
         if request.user == profile.user:
             #POST Request
-            if request.method == "POST" and request.FILES.get('profile_img'):
+            if request.method == "POST":
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 
                 if form.is_valid():
                     profile = form.save(commit=False)
-                    profile.save()
-
+                    profile.save() 
                     return redirect('accounts:profile', user_id=profile.user_id)
                 
                 else:
                     return redirect('accounts:profile')
-            
+                
             #GET Request
             else:
                 form = ProfileForm(instance=profile)

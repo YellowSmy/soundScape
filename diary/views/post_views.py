@@ -33,6 +33,7 @@ def Create(request):
 
             diary.save()
             return redirect('diary:index')
+        print(form.errors)
           
     #GET Request
     else:

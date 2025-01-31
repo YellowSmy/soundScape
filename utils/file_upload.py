@@ -4,7 +4,7 @@ import hashlib
 ## Static folder create function seperated by User
 def user_dir_path(instance, filename):
     """
-    파일경로: media/<basename>/<user_email_hash>/<filename>
+    파일경로: upload/<basename>/<user_email_hash>/<filename>
     """
     email_hash = hashlib.sha256(instance.user.email.encode()).hexdigest()
 
