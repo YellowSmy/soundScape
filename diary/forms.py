@@ -5,7 +5,8 @@ from .models import Diary, Comment
 class DiaryForm(forms.ModelForm):
     class Meta:
         model = Diary
-        fields = ['title', 'content','video_id', 'thumbnail_url', 'music_title', 'artist']
+        fields = ['title', 'content',
+                  'video_id', 'thumbnail_url', 'music_title', 'artist', 'theme'] #hidden method
         exclude = ['writer']
 
         widgets = {
@@ -13,6 +14,7 @@ class DiaryForm(forms.ModelForm):
             "thumbnail_url": forms.HiddenInput(),
             "music_title": forms.HiddenInput(),
             "artist": forms.HiddenInput(),
+            "theme": forms.HiddenInput(),
         }
 
 class MusicForm(forms.ModelForm):

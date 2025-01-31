@@ -2,6 +2,12 @@
 {% load static %}
 {% load filters %}
 
+{% block css %}
+{% with theme_path='css/theme/'|add:post.theme|add:'.css' %}
+<link id="stylesheet-theme" rel="stylesheet" href="{% static theme_path %}">
+{% endwith %}
+{% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 <script src="{% static 'js/detail.js' %}"></script>
@@ -12,7 +18,7 @@
 <!-- CONTENT -->
 <div>
     <!--information-->
-    <h2> {{post.title}} </h2>
+    <h2 id="title"> {{post.title}} </h2>
     <h3>{{post.music_title}} - {{ post.artist }}</h3>
     {{post.create_at}} <br>
     {{post.writer.nickname}}<br>

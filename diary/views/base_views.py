@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 
 from ..models import Diary, Comment
 from ..forms import CommentForm
@@ -49,3 +49,17 @@ def Temp_save(request):
     else:
         html_content = render(request, 'diary/temp_save.html', {'none': "임시 저장 글이 없습니다"})
         return JsonResponse({"html": html_content.content.decode('utf-8')})
+    
+
+## Theme change
+def Change_theme(request):
+    theme = request.GET.get('theme', '')
+    valid_themes = ['basic', 'rock', 'ballad', 'jazz', 'pop']
+    
+    if theme not in valid_themes:
+        return HttpResponseBadRequest("Invalid theme selected")
+    
+    css_path = f'/static/css/theme/{theme}.css'
+    print(css_path, theme)
+
+    return JsonResponse({'css_path': css_path})

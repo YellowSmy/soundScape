@@ -1,3 +1,4 @@
+// Toast UI Editor
 document.addEventListener('DOMContentLoaded', () => {
     const textarea = document.querySelector('#toast-editor');
     if (!textarea) {
@@ -23,3 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
         textarea.value = editor.getMarkdown();
     });
 });
+
+
+//Theme Settings
+function changeTheme(theme) {
+    fetch(`/change-theme/?theme=${theme}`)
+    .then(response => response.json())
+    .then(data => {
+        const link = document.getElementById("stylesheet-theme");
+        link.setAttribute('href', data.css_path)
+        alert(`${theme}으로 전환`);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    //set theme in form value
+    document.getElementById("id_theme").value = theme;
+}
+

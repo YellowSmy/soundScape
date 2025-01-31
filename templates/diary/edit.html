@@ -3,6 +3,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<link id="stylesheet-theme" rel="stylesheet" href="{% static 'css/theme/basic.css' %}">
 {% endblock %}
 
 {% block scripts %}
@@ -49,6 +50,14 @@
    </div>
 </div>
 
+<!--select theme-->
+<div id="theme-container">
+   <button onclick="changeTheme('basic')">Default</button>
+   <button onclick="changeTheme('rock')">Rock</button>
+   <button onclick="changeTheme('jazz')">Jazz</button>
+   <button onclick="changeTheme('ballad')">Ballad</button>
+</div>
+
 <!-- form -->
 <form id="content-form" method="POST" autocomplete="off">
    {% csrf_token %}
@@ -63,6 +72,8 @@
       {{ form.thumbnail_url }}
       {{ form.music_title }}
       {{ form.artist }}
+
+      {{ form.theme }}
    </div>
    <input type="submit" value="발행">
    <input type="submit" id="temp-save" name="temp-save" value="임시저장">
