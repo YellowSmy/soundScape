@@ -69,6 +69,9 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Styling Test
+test
+
 # Translations
 *.mo
 
