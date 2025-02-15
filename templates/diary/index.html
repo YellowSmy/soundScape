@@ -24,14 +24,20 @@
 <div class="under-container">
     <div class="user">
         {% if user_profile.profile_img %}
-        <img class="image" src="{{ user_profile.profile_img.url }}" width="50px">
+        <img class="img" src="{{ user_profile.profile_img.url }}">
+        {% else %}
+        <div class="img"></div>
         {% endif %}
-        <p>{{ user_profile.nickname|default:"로그인하세요." }}</p>
+        <p id="nickname">{{ user_profile.nickname|default:"로그인하세요." }}</p>
     </div>
 
     <div class="post">
         {% for post in posts %}
-        <a href="{% url 'diary:detail' post.id %}">{{ post.title }}</a>
+        <div class="left-content">
+            <a id="title" href="{% url 'diary:detail' post.id %}">{{ post.title }}</a>
+            <p id="artist">{{ post.artist }} - {{ post.music_title }}</p>
+        </div>
+        <img id="thumbnail" src="{{ post.thumbnail_url }}">
         {% endfor %}
     </div>
 </div>
