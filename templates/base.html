@@ -7,7 +7,9 @@
   <!-- CSS -->
   {% block css %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/common/navigation.css' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   {% endblock %}
 
   <!--script-->
@@ -15,31 +17,20 @@
 
   {% endblock %}
   <!-- Title -->
-  <title>Main</title>
+  <title>soundScape</title>
 </head>
 
 <body>
-  <div>
-    <!-- navigation -->
-    <a href="{% url 'diary:index' %}">HOME</a>
-    <a href="{% url 'diary:create' %}">NEW</a>
-
-    <!-- LogOut/Login -->
-    {% if request.user.is_authenticated %}
-    <form action="{% url 'account_logout' %}" method="POST">
-      {% csrf_token %}
-      <input type="submit" value="{{user_profile.nickname}} 님 logout">
-    </form>
-
-    <!-- profile -->
-    <a href="{% url 'accounts:profile' user_profile.user_id %}">프로필 드가자</a>
-
-    {% else %}
-    <a href="{% url 'account_login' %}">로그인</a>
-    <a href="{% url 'account_signup' %}">회원가입</a>
-    {% endif %}
-
+  <!-- navbar -->
+  <div id="navigation" class="material-symbols-outlined">
+    <a id="home" class="icon" href="{% url 'diary:index' %}">home</a>
+    <a id="search" class="icon" href="">search</a>
+    <a id="new" class="icon" href="{% url 'diary:create' %}">add</a>
+    <a id="follow" class="icon" href="">group</a>
+    <a id="profile" class="icon" href="">person</a>
   </div>
+
+  <!--content -->
   <div>
     {% block content %}
 

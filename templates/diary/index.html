@@ -1,14 +1,40 @@
 {% extends 'base.html'%}
+{% load static %}
+
+{% block css %}
+{{ block.super}}
+<link rel="stylesheet" href="{% static 'css/common/home.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<h1> index </h1>
+<!--authentication-->
+<div class="upper-container">
+    <!-- Logout/Login -->
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'account_logout' %}" method="POST">
+        {% csrf_token %}
+        <input id="logout" type="submit" value="로그아웃">
+    </form>
+    {% else %}
+    <a id="login" href="{% url 'account_login' %}">로그인</a>
+    {% endif %}
+</div>
 
-{% for post in posts %}
-<a href="{% url 'diary:detail' post.id %}">{{ post.title }}</a>
-<br>
-{% endfor %}
+<div class="under-container">
+    <div class="user">
+        {% if user_profile.profile_img %}
+        <img class="image" src="{{ user_profile.profile_img.url }}" width="50px">
+        {% endif %}
+        <p>{{ user_profile.nickname|default:"로그인하세요." }}</p>
+    </div>
 
+    <div class="post">
+        {% for post in posts %}
+        <a href="{% url 'diary:detail' post.id %}">{{ post.title }}</a>
+        {% endfor %}
+    </div>
+</div>
 <!-- Guest Alert -->
 {% for message in messages %}
 {% if 'guest_message' in message.tags %} <!-- 태그가 'guest_message'인 메시지 필터링 -->

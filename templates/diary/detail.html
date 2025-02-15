@@ -3,8 +3,10 @@
 {% load filters %}
 
 {% block css %}
+{{ block.super }}
 {% with theme_path='css/theme/'|add:post.theme|add:'.css' %}
 <link id="stylesheet-theme" rel="stylesheet" href="{% static theme_path %}">
+<link rel="stylesheet" href="{% static 'css/layout/detail.css' %}">
 {% endwith %}
 {% endblock %}
 
@@ -53,15 +55,10 @@
     {% endif %}
 </div>
 
-<!-- LIKE -->
-<div>
-    <!--like number-->
-    <div>
-        <p>{{ post.like_users.count }}명이 좋아합니다.</p>
-    </div>
-
+<!--COMMUNICATION BUTTON-->
+<div id="communication">
     <!--like btn-->
-    <div>
+    <div id="like-btn">
         <form action="{% url 'diary:like' post.id %}" method="POST">
             {% csrf_token %}
 
@@ -73,24 +70,35 @@
         </form>
     </div>
 
-    <!--like list-->
-    <div>
-        <h6>좋아요 목록</h6>
-        <ul>
-            {% for like in post.like_users.all %}
-            <p>{{ like.nickname }}</p>
-            <a href="{% url 'accounts:profile' like.user_id %}">남의 프로필</a>
-            <br>
-
-            {% empty %}
-            <li> ㅠㅠ </li>
-            {% endfor %}
-        </ul>
+    <!--like number & list redirect -->
+    <div id="like-number">
+        <p onclick="toggle('like-list')">{{ post.like_users.count }}명이 좋아합니다.</p>
     </div>
+
+    <!--comment btn-->
+    <button id="comment-btn" onclick="toggle('comment')">댓글</button>
+</div>
+
+<!--HIDDEN DIV-->
+<!--like list-->
+<div id="like-list">
+    <h6>좋아요 목록</h6>
+    <ul>
+        {% for like in post.like_users.all %}
+        {% if like != post.writer %}
+        <p>{{ like.nickname }}</p>
+        <a href="{% url 'accounts:profile' like.user_id %}">남의 프로필</a>
+        <br>
+        {% endif %}
+
+        {% empty %}
+        <li> ㅠㅠ </li>
+        {% endfor %}
+    </ul>
 </div>
 
 <!-- COMMENT -->
-<div>
+<div id="comment">
     <h3>댓글</h3>
     {% if comments %}
     <p>댓글 {{ comments|length }}개</p>
@@ -101,6 +109,7 @@
         <li>
             <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
             <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
+
             <!-- delete -->
             {% if comment.writer.user == request.user %}
             <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
@@ -144,7 +153,7 @@
             <hr>
 
             <!-- reply-comment form -->
-            <div class="reply-form" id="reply-form-{{ comment.id }}" style="display: none;">
+            <div class="reply-form" id="reply-form-{{ comment.id }}">
                 {% if request.user.is_authenticated %}
                 <form class="reply-form-{{ comment.id }}" method="POST"
                     action="{% url 'diary:comment_reply' post.id comment.id %}">
@@ -161,22 +170,21 @@
 
         {% endfor %}
     </ul>
-</div>
 
-<hr>
+    <!--Form-->
+    <div>
+        <!-- comment create form -->
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'diary:comment_create' post.id %}" method="POST">
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type="submit" value="작성">
+        </form>
 
-<!--Form-->
-<div>
-    <!-- comment create form -->
-    {% if request.user.is_authenticated %}
-    <form action="{% url 'diary:comment_create' post.id %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form }}
-        <input type="submit" value="작성">
-    </form>
+        {% else %}
+        <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
+        {% endif %}
+    </div>
 
-    {% else %}
-    <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
-    {% endif %}
 </div>
 {% endblock %}
