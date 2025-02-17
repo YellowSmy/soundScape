@@ -9,14 +9,14 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var player;
 function initializePlayer(videoId) {
     player = new YT.Player('player', {
-        height: '360',  //변경가능-영상 높이
-        width: '640',  //변경가능-영상 너비
+        height: '270',  //변경가능-영상 높이
+        width: '480',  //변경가능-영상 너비
         videoId: videoId,  //변경-영상ID
 
 
         playerVars: {
             'rel': 0,    //연관동영상 표시여부(0:표시안함)
-            'controls': 1,    //플레이어 컨트롤러 표시여부(0:표시안함)
+            'controls': 0,    //플레이어 컨트롤러 표시여부(0:표시안함)
             'autoplay': 0,   //자동재생 여부(1:자동재생 함, mute와 함께 설정)
             'mute': 0,   //음소거여부(1:음소거 함)
             'loop': 1,    //반복재생여부(1:반복재생 함)
@@ -54,30 +54,37 @@ function musicControl() {
         var playerState =player.getPlayerState()
         if(playerState == 1) {
             player.pauseVideo()
-            playBtn.innerText = ">>";
+            playBtn.innerText = "play_arrow";
         } 
         else {
             player.playVideo();
-            playBtn.innerText = "||";
+            playBtn.innerText = "pause";
         }
     });
 
     //Audio
     // volume
     var slider = document.getElementById("volume");
-    slider.value = 50;
-    slider.addEventListener('mousemove', () => { player.setVolume(slider.value); })
 
+    slider.addEventListener('input', () => {
+        let volume = parseInt(slider.value, 10);
+        player.setVolume(volume);
+
+        if (volume > 0) {
+            player.unMute();
+            mute.innerText = "volume_up";
+        }
+    });
     // mute
     var mute = document.getElementById("mute");
     mute.addEventListener("click", () => {
         if (player.isMuted()) {
             player.unMute();
-            mute.innerText = "음소거";
+            mute.innerText = "volume_up";
         }
         else {
             player.mute();
-            mute.innerText = "켜기";
+            mute.innerText = "volume_off";
         }
     });
 
@@ -87,34 +94,27 @@ function musicControl() {
     var playerclick = false;
 
     var checkDuration = setInterval(() => {
-        if (player.getDuration) {
+        if (player && player.getDuration && player.getDuration() > 0) {
             seeker.max = player.getDuration();
             clearInterval(checkDuration);
         }
     }, 250);
 
-    seeker.value = 0;
-
-    seeker.addEventListener('mousemove', () => {
-        if (playerclick) {
-            player.seekTo(seeker.value, false);
-        }
+    seeker.addEventListener("input", () => {
+        playerclick = true; 
     });
 
-    seeker.addEventListener('mousedown', () => { playerclick = true; });
-    seeker.addEventListener('mouseup', () => {
+    seeker.addEventListener("change", () => {
+        let currentVolume = player.getVolume();  
+        player.seekTo(parseFloat(seeker.value), true);
+        player.setVolume(currentVolume);
         playerclick = false;
-        player.seekTo(seeker.value, true)
     });
 
-    setInterval(updatePlayer, 250);
-
-    function updatePlayer() {
-        if (player && player.getDuration) {
-            if (!playerclick) {
-                seeker.value = player.getCurrentTime();
-            }
+    setInterval(() => {
+        if (player && player.getCurrentTime && !playerclick) {
+            seeker.value = player.getCurrentTime();
         }
-    }
+    }, 250);
 }
 

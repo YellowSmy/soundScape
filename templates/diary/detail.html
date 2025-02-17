@@ -6,7 +6,7 @@
 {{ block.super }}
 {% with theme_path='css/theme/'|add:post.theme|add:'.css' %}
 <link id="stylesheet-theme" rel="stylesheet" href="{% static theme_path %}">
-<link rel="stylesheet" href="{% static 'css/layout/detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/detail.css' %}">
 {% endwith %}
 {% endblock %}
 
@@ -18,173 +18,140 @@
 
 {% block content %}
 <!-- CONTENT -->
-<div>
+<div class="upper-container">
     <!--information-->
     <h2 id="title"> {{post.title}} </h2>
-    <h3>{{post.music_title}} - {{ post.artist }}</h3>
-    {{post.create_at}} <br>
-    {{post.writer.nickname}}<br>
-    <a href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">글쓴이 프로필</a><br>
+    <a id="nickname" href="{% url 'accounts:profile' post.writer.user.profile.user_id %}">@{{post.writer.nickname}}</a>
 
+    <!--CRUD Button-->
+    {% if post.writer.user == request.user %}
+    <a class="edit-btn" id="second-edit" href="{% url 'diary:update' post.id %}">수정</a>
+    <a class="edit-btn" href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
+        삭제
+    </a>
+    {% endif %}
+
+</div>
+
+<div class="under-container">
     <!--music-->
-    <div s>
+    <div class="music-container">
         <!--video-->
         <div id="player" video-id="{{ post.video_id }}"></div> <br>
 
         <!--player-->
-        <div>
-            <button id="playBtn">>></button>
-            <button id="mute">음소거</button>
-            <div class="slider">
-                <input id="volume" type="range" min="1" max="100" value="50">
+        <div class="player-control">
+            <div class="video-control">
+                <span class="material-symbols-outlined" id="playBtn">play_arrow</span>
                 <input id="seeker" type="range" value="0">
+            </div>
+            <div class="volume-control">
+                <span class="material-symbols-outlined" id="mute">volume_up</span>
+                <input id="volume" type="range" min="1" max="100" value="50">
             </div>
         </div>
     </div>
 
     <!--main content-->
-    {{ post.content|mark }}
-
-    <!-- CRUD button -->
-    <br><br>
-    {% if post.writer.user == request.user %}
-    <a href="{% url 'diary:update' post.id %}">수정</a>
-    <a href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
-        삭제
-    </a>
-    {% endif %}
-</div>
-
-<!--COMMUNICATION BUTTON-->
-<div id="communication">
-    <!--like btn-->
-    <div id="like-btn">
-        <form action="{% url 'diary:like' post.id %}" method="POST">
-            {% csrf_token %}
-
-            {% if request.user.profile in post.like_users.all %}
-            <input type="submit" value="UnLike">
-            {% else %}
-            <input type="submit" value="Like">
-            {% endif %}
-        </form>
+    <div class="diary-container">
+        {{ post.content|mark }}
     </div>
 
-    <!--like number & list redirect -->
+    <!--like number & create_at-->
     <div id="like-number">
-        <p onclick="toggle('like-list')">{{ post.like_users.count }}명이 좋아합니다.</p>
+        <p>{{ post.create_at }}</p>
+        <p class="modal-input" data-modal="like-list">{{ post.like_users.count }}명이 좋아합니다.</p>
     </div>
-
-    <!--comment btn-->
-    <button id="comment-btn" onclick="toggle('comment')">댓글</button>
 </div>
+
+<!--comment/like button-->
+<form action="{% url 'diary:like' post.id %}" method="POST">
+    {% csrf_token %}
+
+    {% if request.user.profile in post.like_users.all %}
+    <input class="edit-btn" id="like-btn" type="submit" value="❤️">
+    {% else %}
+    <input class="edit-btn" id="like-btn" type="submit" value="🤍">
+    {% endif %}
+</form>
+<button class="edit-btn modal-input" id="comment-btn" data-modal="comment">댓글</button>
+
 
 <!--HIDDEN DIV-->
 <!--like list-->
-<div id="like-list">
-    <h6>좋아요 목록</h6>
-    <ul>
+<div class="modal-container" id="like-list">
+    <div class="modal" onclick="event.stopPropagation();">
+        <span class="close-btn">&times;</span>
+        <p class="modal-title">좋아요</p>
         {% for like in post.like_users.all %}
         {% if like != post.writer %}
-        <p>{{ like.nickname }}</p>
-        <a href="{% url 'accounts:profile' like.user_id %}">남의 프로필</a>
-        <br>
-        {% endif %}
-
-        {% empty %}
-        <li> ㅠㅠ </li>
-        {% endfor %}
-    </ul>
-</div>
-
-<!-- COMMENT -->
-<div id="comment">
-    <h3>댓글</h3>
-    {% if comments %}
-    <p>댓글 {{ comments|length }}개</p>
-    {% endif %}
-
-    <ul>
-        {% for comment in comments %}
-        <li>
-            <p>{{ comment.writer.nickname }} ({{ comment.created_at }}) - {{ comment.content }}</p>
-            <a href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">남의 프로필</a>
-
-            <!-- delete -->
-            {% if comment.writer.user == request.user %}
-            <form action="{% url 'diary:comment_delete' post.id comment.id %}" method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="submit" value="delete" onclick="return confirm('really delete?')">
-            </form>
-            <!-- update -->
-            <a href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
+        <div class="like-profile">
+            {% if like.profile_img %}
+            <img class="like-img" src="{{ like.profile_img.url }}" alt="">
             {% endif %}
-
-            <!-- reply-button -->
-            <button class="reply-button" parent-id="{{ comment.id }}">답글</button>
-
-
-            <!-- reply-comment -->
-            <!-- reply-comment list -->
-            <div>
-                {% if comment.replies.all %}
-                <ul>
-                    {% for reply in comment.replies.all %}
-                    <li>
-                        <p>>> {{ reply.writer.nickname }} ({{ reply.created_at }}) - {{ reply.content }}</p>
-                        <a href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">남의 프로필</a>
-
-                        <!-- delete -->
-                        {% if reply.writer.user == request.user %}
-                        <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST"
-                            style="display: inline;">
-                            {% csrf_token %}
-                            <input type="submit" value="delete" onclick="return confirm('really delete?')">
-                        </form>
-                        <!-- update -->
-                        <a href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-
-            <hr>
-
-            <!-- reply-comment form -->
-            <div class="reply-form" id="reply-form-{{ comment.id }}">
-                {% if request.user.is_authenticated %}
-                <form class="reply-form-{{ comment.id }}" method="POST"
-                    action="{% url 'diary:comment_reply' post.id comment.id %}">
-                    {% csrf_token %}
-                    {{ comment_form }}
-                    <input type="submit" value="작성">
-                </form>
-                {% endif %}
-            </div>
-        </li>
-
-        {% empty %}
-        <p>No 댓글</p>
-
-        {% endfor %}
-    </ul>
-
-    <!--Form-->
-    <div>
-        <!-- comment create form -->
-        {% if request.user.is_authenticated %}
-        <form action="{% url 'diary:comment_create' post.id %}" method="POST">
-            {% csrf_token %}
-            {{ comment_form }}
-            <input type="submit" value="작성">
-        </form>
-
-        {% else %}
-        <a href="{% url 'account_login' %}">댓글 쓸라면 로그인</a>
+            <a class="like-nickname" href="{% url 'accounts:profile' like.user_id %}">{{ like.nickname }}</a>
+        </div>
         {% endif %}
+        {% empty %}
+        <p class="no"> 첫 반응을 남겨보세요! </p>
+        {% endfor %}
     </div>
+</div>
+<!--comment-->
+<div class="modal-container" id="comment">
+    <div class="modal" onclick="event.stopPropagation();">
+        <span class="close-btn">&times;</span>
+        <p class="modal-title">댓글 {{ comments|length }}개</p>
 
+        <!--Comment list-->
+        {% for comment in comments %}
+        <div class="comment-container">
+            <div class="upper-content">
+                <div class="comment-profile">
+                    {% if comment.writer.profile_img %}
+                    <img class="comment-img" src="{{ comment.writer.profile_img.url }}" alt="">
+                    {% endif %}
+                    <a id="comment-writer" href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">
+                        @{{ comment.writer.nickname }}</a>
+                </div>
+                <p id="comment-time">{{ comment.created_at|date:"Y.m.d. H:i" }}</p>
+            </div>
+            <p id="comment-content">{{ comment.content }}</p>
+
+            <div class="comment-btn">
+                <!-- delete -->
+                {% if comment.writer.user == request.user %}
+                <form action=" {% url 'diary:comment_delete' post.id comment.id %}" method="POST"
+                    style="display: inline;">
+                    {% csrf_token %}
+                    <input class="comment-edit" type="submit" value="삭제" onclick="return confirm('정말로 삭제하시겠습니까?')">
+                </form>
+                <!-- update -->
+                <a class="comment-edit" href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
+                {% endif %}
+                <!-- reply-button -->
+                <button class="reply-button comment-edit" parent-id="{{ comment.id }}">답글</button>
+            </div>
+
+        </div>
+        {% empty %}
+        <p class="no">첫번째 댓글을 써주세요!</p>
+        {% endfor %}
+
+        <!--Form-->
+        <div class="comment-form">
+            {% if request.user.is_authenticated %}
+            <form action="{% url 'diary:comment_create' post.id %}" method="POST">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="submit" value="작성">
+            </form>
+
+            {% else %}
+            <a href="{% url 'account_login' %}">댓글을 작성하려면 로그인하세요.</a>
+            {% endif %}
+        </div>
+
+    </div>
 </div>
 {% endblock %}

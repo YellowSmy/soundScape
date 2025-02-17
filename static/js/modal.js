@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const modalLinks = document.querySelectorAll(".follower");
+    const modalLinks = document.querySelectorAll(".modal-input");
     const modals = document.querySelectorAll(".modal-container");
 
     // 모달 열기 이벤트

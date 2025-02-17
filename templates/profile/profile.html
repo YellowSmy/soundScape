@@ -8,7 +8,6 @@
 
 {% block scripts %}
 {{ block.super}}
-<script src="{% static 'js/modal.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +32,7 @@
     <!--edit-->
     <div>
         {% if profile.user == request.user %}
-        <a class="edit-btn" id="edit-profile" href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
+        <a class="edit-btn" id="second-edit" href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
         <a class="edit-btn" href="{% url 'accounts:user_delete' profile.user_id %}"
             onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
         {% endif %}
@@ -51,8 +50,8 @@
 <!--follow-->
 <!--follow number-->
 <div class="follow-container">
-    <a class="follower" data-modal="modal-followers" id="follow" href="#">팔로우 {{ active_followers.count }}</a>
-    <a class="follower" data-modal="modal-followings" id="following" href="#">팔로잉 {{ active_followings.count }} </a>
+    <a class="modal-input" data-modal="modal-followers" id="follow" href="#">팔로우 {{ active_followers.count }}</a>
+    <a class="modal-input" data-modal="modal-followings" id="following" href="#">팔로잉 {{ active_followings.count }} </a>
 </div>
 
 <!--Content list-->

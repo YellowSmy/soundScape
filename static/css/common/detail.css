@@ -1,0 +1,385 @@
+/*layout*/
+.upper-container {
+    display: flex;
+
+    position: absolute;
+    width: 100%;
+    height: 25vh;
+    left: 0px;
+    top: 0px;
+
+    background-image: url("/static/images/background/detail_bgi.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    filter: brightness(130%);
+
+}
+
+.under-container {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 63%;
+
+    overflow-y: scroll;
+}
+
+.music-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.diary-container {
+    padding: 13px;
+
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right: 25px;
+
+    background: #F3F3F3;
+    border-radius: 20px;
+}
+.diary-container > p {
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 21px;
+
+    margin: 1px;
+
+    color: #000000;
+}
+
+
+/*information*/
+#title {
+    position: absolute;
+    width: 205px;
+    height: 47px;
+
+    margin-left: 25px;
+    margin-top: 16.5vh;
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 41px;
+    display: flex;
+    align-items: center;
+
+    color: #000000;
+}
+#nickname {
+    position: absolute;
+    height: 22px;
+
+    right: 0;
+    margin-right: 15px;
+    margin-top: 20.5vh;
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+
+    color: #000000;
+}
+
+
+/*music-player*/
+#player {
+    width: 70%;
+    height: 21vh;
+
+    margin-left: 25px;
+}
+
+.player-control {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 70%;
+    margin-left: 25px;
+
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.video-control {
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+
+    width: 158px;
+    height: 18px;
+    left: 27px;
+    top: 343px;
+
+    background: #D9D9D9;
+    border-radius: 60px;
+}
+
+.volume-control {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    right: 0;
+}
+#playBtn, #mute {
+    margin-left: 2px;
+    font-size: 20px;
+}
+#seeker {
+    height: 5px;
+    background: #565656;
+    outline: none;
+    accent-color: #565656;
+    cursor: pointer;
+}
+#volume {
+    width: 75px;
+    height: 5px;
+    background: #565656;
+    outline: none;
+    accent-color: #565656;
+}
+
+
+/*communication button*/
+#like-number {
+    width: 100%;
+    bottom: 0;
+
+    margin-left: 25px;
+    margin-top: 15px;
+}
+#like-number > p {
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 21px;
+
+    color: #000000;
+}
+
+#like-btn {
+    width: 40px;
+    top: auto;
+    bottom: 0;
+    right: 0;
+
+    margin-bottom: 60px;
+}
+#comment-btn {
+    top: auto;
+    bottom: 0;
+    right: 0;
+
+    margin-right: 50px;
+    margin-bottom: 60px;
+}
+
+
+/* hidden */
+#like-list, #comment {
+    display: none;
+}
+.reply-form {
+    display: none;
+}
+
+/*like modal*/
+.like-profile {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    align-items: center;
+
+    position: relative;
+    padding: 12px 20px;
+    width: 85%;
+    height: 20px;
+    margin-top: 15px;
+
+    background: #ECEAEA;
+    border-radius: 20px;
+}
+.like-img {
+    display: inline;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    margin-bottom: 0;
+
+    object-fit: cover;
+}
+.like-nickname {
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 23px;
+
+    color: #000000;
+}
+.no {
+    width: 100%;
+    text-align: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 17px;
+    margin-left: 5px;
+}
+
+/*comment modal*/
+.comment-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;  
+
+    padding: 10px 10px;
+    padding-top: 3px;
+    width: 95%;
+    height: 50px;
+    margin: 15px auto;
+
+    background: #E7E7E7;
+    border-radius: 20px;
+}
+
+.upper-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 100%;
+    top: 0;
+}
+
+.comment-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#comment-writer{
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+
+    color: #4C4C4C;
+}
+.comment-img {
+    display: inline;
+    width: 22px;
+    height: 22px;
+    border-radius: 50px;
+    margin-right: 5px;
+
+    object-fit: cover;
+}
+
+#comment-time{
+    margin-top: 5px;
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 9px;
+    line-height: 18px;
+
+    color: #555555;
+}
+#comment-content {
+    text-decoration: none;
+
+    width: 100%;
+    height: auto;
+
+    top: 0;
+    margin-top: -3px;
+    margin-left: 5px;
+
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 23px;
+
+    color: #000000;
+}
+
+/*comment-btn*/
+.comment-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    width: 100%;
+}
+.comment-edit {
+    border: 0;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    width: 35px;
+    height: 20px;
+    margin-left: 3px;
+
+    background: #D9D9D9;
+    border-radius: 60px;
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 10px;
+
+    color: #383838;
+}
+
+
+/*comment form*/
+.comment-form {
+    display: flex;
+
+    width: 100%;
+    margin-top: auto;
+}
+
+
+
+
+
+
