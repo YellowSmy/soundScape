@@ -104,20 +104,22 @@
         <p class="modal-title">댓글 {{ comments|length }}개</p>
 
         <!--Comment list-->
-        {% for comment in comments %}
-        <div class="comment-container">
-            <div class="upper-content">
-                <div class="comment-profile">
-                    {% if comment.writer.profile_img %}
-                    <img class="comment-img" src="{{ comment.writer.profile_img.url }}" alt="">
-                    {% endif %}
-                    <a id="comment-writer" href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">
-                        @{{ comment.writer.nickname }}</a>
-                </div>
-                <p id="comment-time">{{ comment.created_at|date:"Y.m.d. H:i" }}</p>
-            </div>
-            <p id="comment-content">{{ comment.content }}</p>
+        <div class="comment-list-container">
+            {% for comment in comments %}
 
+            <div class="comment-container">
+                <div class="upper-content">
+                    <div class="comment-profile">
+                        {% if comment.writer.profile_img %}
+                        <img class="comment-img" src="{{ comment.writer.profile_img.url }}" alt="">
+                        {% endif %}
+                        <a id="comment-writer" href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">
+                            @{{ comment.writer.nickname }}</a>
+                    </div>
+                    <p id="comment-time">{{ comment.created_at|date:"Y.m.d. H:i" }}</p>
+                </div>
+                <p id="comment-content">{{ comment.content }}</p>
+            </div>
             <div class="comment-btn">
                 <!-- delete -->
                 {% if comment.writer.user == request.user %}
@@ -133,18 +135,18 @@
                 <button class="reply-button comment-edit" parent-id="{{ comment.id }}">답글</button>
             </div>
 
+            {% empty %}
+            <p class="no">첫번째 댓글을 써주세요!</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p class="no">첫번째 댓글을 써주세요!</p>
-        {% endfor %}
 
         <!--Form-->
-        <div class="comment-form">
+        <div class="comment-form-container">
             {% if request.user.is_authenticated %}
-            <form action="{% url 'diary:comment_create' post.id %}" method="POST">
+            <form class="comment-form" action="{% url 'diary:comment_create' post.id %}" method="POST">
                 {% csrf_token %}
-                {{ comment_form }}
-                <input type="submit" value="작성">
+                {{ comment_form.content }}
+                <input class="comment-submit material-symbols-outlined" type="submit" value="arrow_upward">
             </form>
 
             {% else %}

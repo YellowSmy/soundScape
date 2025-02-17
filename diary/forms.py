@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import TextInput
 from .models import Diary, Comment
 
 ## Main Content Form
@@ -27,4 +28,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['post', 'writer', 'parent']
-
+        widgets = {
+            'content': TextInput(attrs={
+                'class': "form-control",
+                'placeholder': '댓글을 입력하세요...',
+            },)
+        }
