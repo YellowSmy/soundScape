@@ -1,31 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/common/profile.css' %}">
+{% endblock %}
+
+{% block scripts %}
+{{ block.super}}
+<script src="{% static 'js/modal.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-<div>
-    <h5>프로필</h5>
-</div>
-
-<!--my profile-->
-<div>
-    {% if profile.profile_img %}
-    <div>
-        <img class="image" src="{{ profile.profile_img.url }}" alt="">
-    </div>
-    {% endif %}
-
-    <div>
-        <p>{{ profile.nickname }}</p>
-        <p>{{ profile.bio }}</p>
-    </div>
-</div>
-
-<!--follow-->
-<div>
-    <!--follow number-->
-    <div>
-        <p>Follow : {{ active_followers.count }}</p>
-        <p>Following {{ active_followings.count }} </p>
-    </div>
+<div class="upper-container">
+    <p id="nickname">{{ profile.nickname }}</p>
 
     <!--follow btn-->
     <div>
@@ -34,78 +22,103 @@
             {% csrf_token %}
 
             {% if request.user.profile in profile.followers.all %}
-            <input type="submit" value="UnFollow">
+            <input class="edit-btn" type="submit" value="언팔로우">
             {% else %}
-            <input type="submit" value="Follow">
+            <input class="edit-btn" type="submit" value="팔로우">
             {% endif %}
         </form>
         {% endif %}
     </div>
 
-
-    <!-- followers list -->
+    <!--edit-->
     <div>
-        <h6>팔로워 목록</h6>
-        <ul>
-            {% for follower in active_followers %}
-            <p>{{ follower.nickname }}</p>
-            <a href="{% url 'accounts:profile' follower.user_id%}">남의 프로필</a>
-            <br>
-
-            {% empty %}
-            <li>팔로워가 없습니다.</li>
-            {% endfor %}
-        </ul>
-        <h6>팔로잉 목록</h6>
-        <ul>
-            {% for following in active_followings %}
-            <li>{{ following.nickname }}</li>
-            <a href="{% url 'accounts:profile' following.user_id%}">남의 프로필</a>
-            <br>
-            {% empty %}
-            <li>팔로잉이 없습니다.</li>
-            {% endfor %}
-        </ul>
+        {% if profile.user == request.user %}
+        <a class="edit-btn" id="edit-profile" href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
+        <a class="edit-btn" href="{% url 'accounts:user_delete' profile.user_id %}"
+            onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
+        {% endif %}
     </div>
+
+</div>
+<!--my profile-->
+<div>
+    {% if profile.profile_img %}
+    <img class="img" src="{{ profile.profile_img.url }}" alt="">
+    {% endif %}
+    <p id="bio">{{ profile.bio }}</p>
+</div>
+
+<!--follow-->
+<!--follow number-->
+<div class="follow-container">
+    <a class="follower" data-modal="modal-followers" id="follow" href="#">팔로우 {{ active_followers.count }}</a>
+    <a class="follower" data-modal="modal-followings" id="following" href="#">팔로잉 {{ active_followings.count }} </a>
 </div>
 
 <!--Content list-->
-<div>
+<div class="content-container">
     <!--diary-->
-    <div style="display: inline;">
-        <h6>작성글 목록</h6>
-        <ul>
-            {% for diary in diaries %}
-            <li>
-                <a href="{% url 'diary:detail' diary.id %}">{{ diary }}</a>
-            </li>
-            {% empty %}
-            <li>작성글이 없습니다.</li>
-            {% endfor %}
-        </ul>
+    <p class="content-title">작성글</p>
+    {% for diary in diaries %}
+    <div class="post">
+        <div class="left-content">
+            <a id="title" href="{% url 'diary:detail' diary.id %}">{{ diary.title }}</a>
+            <p id="artist">{{ diary.artist }} - {{ diary.music_title }}</p>
+        </div>
+        <img id="thumbnail" src="{{ diary.thumbnail_url }}">
     </div>
+    {% empty%}
+    <p>작성글이 없습니다.</p>
+    {% endfor %}
+
     <!--comment-->
-    <div style="display: inline;">
-        <h6>작성댓글 목록</h6>
-        <ul>
-            {% for comment in comments %}
-            <li>
-                <a href="{% url 'diary:detail' comment.post.id %}">{{ comment }}</a> (글제목: {{ comment.post }})
-            </li>
-            {% empty %}
-            <li>작성댓글이 없습니다.</li>
-            {% endfor %}
-        </ul>
+    <div class="comment-container">
+        <p class="content-title">작성댓글</p>
+        {% for comment in comments %}
+        <div class="comment">
+            <a class="comment-content" href="{% url 'diary:detail' comment.post.id %}">{{ comment }}</a>
+            <p class="comment-content" id="content-title">(글제목: {{comment.post }})</p>
+        </div>
+        {% empty %}
+        <p>작성댓글이 없습니다.</p>
+
+        {% endfor %}
     </div>
 </div>
 
-<!--edit-->
-<div>
-    {% if profile.user == request.user %}
-    <a href="{% url 'accounts:profile_modify' profile.user_id %}">수정</a>
-
-    <a href="{% url 'accounts:user_delete' profile.user_id %}" onclick="return confirm('진짜로 탈퇴?')">탈퇴</a>
-    {% endif %}
+<!--hidden-->
+<div class="modal-container" id="modal-followers">
+    <div class="modal" onclick="event.stopPropagation();">
+        <span class="close-btn">&times;</span>
+        <p class="modal-title">팔로워</p>
+        {% for follower in active_followers %}
+        <div class="follow-profile">
+            {% if follower.profile_img %}
+            <img class="follow-img" src="{{ follower.profile_img.url }}" alt="">
+            {% endif %}
+            <a class="follow-nickname" href="{% url 'accounts:profile' follower.user_id%}">{{ follower.nickname }}</a>
+        </div>
+        {% empty %}
+        <p class="no-follow">팔로워가 없습니다.</p>
+        {% endfor %}
+    </div>
 </div>
 
-{% endblock%}
+<div class="modal-container" id="modal-followings">
+    <div class="modal" onclick="event.stopPropagation();">
+        <span class="close-btn">&times;</span>
+        <p class="modal-title">팔로워</p>
+        {% for following in active_followings %}
+        <div class="follow-profile">
+            {% if following.profile_img %}
+            <img class="follow-img" src="{{ following.profile_img.url }}" alt="">
+            {% endif %}
+            <a class="follow-nickname" href="{% url 'accounts:profile' following.user_id%}">{{ following.nickname }}</a>
+        </div>
+        {% empty %}
+        <p class="no-follow">팔로잉이 없습니다.</p>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}

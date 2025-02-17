@@ -31,15 +31,16 @@
         <p id="nickname">{{ user_profile.nickname|default:"로그인하세요." }}</p>
     </div>
 
+    {% for post in posts %}
     <div class="post">
-        {% for post in posts %}
         <div class="left-content">
             <a id="title" href="{% url 'diary:detail' post.id %}">{{ post.title }}</a>
             <p id="artist">{{ post.artist }} - {{ post.music_title }}</p>
         </div>
         <img id="thumbnail" src="{{ post.thumbnail_url }}">
-        {% endfor %}
     </div>
+    {% endfor %}
+
 </div>
 <!-- Guest Alert -->
 {% for message in messages %}

@@ -26,8 +26,13 @@
     <a id="home" class="icon" href="{% url 'diary:index' %}">home</a>
     <a id="search" class="icon" href="">search</a>
     <a id="new" class="icon" href="{% url 'diary:create' %}">add</a>
-    <a id="follow" class="icon" href="">group</a>
-    <a id="profile" class="icon" href="">person</a>
+    <a id="follow" class="icon" href="javascript:alert('준비중입니다.');">group</a>
+
+    {% if request.user.is_authenticated %}
+    <a id="profile" class="icon" href="{% url 'accounts:profile' user_profile.user_id %}">person</a>
+    {% else %}
+    <a id="profile" class="icon" href="{% url 'account_login' %}">person</a>
+    {% endif %}
   </div>
 
   <!--content -->
