@@ -37,7 +37,7 @@
     <!--music-->
     <div class="music-container">
         <!--video-->
-        <div id="player" video-id="{{ post.video_id }}"></div> <br>
+        <div id="player" video-id="{{ post.video_id }}"></div>
 
         <!--player-->
         <div class="player-control">
@@ -106,25 +106,25 @@
         <!--Comment list-->
         <div class="comment-list-container">
             {% for comment in comments %}
-
             <div class="comment-container">
                 <div class="upper-content">
                     <div class="comment-profile">
                         {% if comment.writer.profile_img %}
                         <img class="comment-img" src="{{ comment.writer.profile_img.url }}" alt="">
                         {% endif %}
-                        <a id="comment-writer" href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">
+                        <a class="comment-writer"
+                            href="{% url 'accounts:profile' comment.writer.user.profile.user_id %}">
                             @{{ comment.writer.nickname }}</a>
                     </div>
-                    <p id="comment-time">{{ comment.created_at|date:"Y.m.d. H:i" }}</p>
+                    <p class="comment-time">{{ comment.created_at|date:"Y.m.d. H:i" }}</p>
                 </div>
-                <p id="comment-content">{{ comment.content }}</p>
+                <p class="comment-content">{{ comment.content }}</p>
             </div>
+
             <div class="comment-btn">
                 <!-- delete -->
                 {% if comment.writer.user == request.user %}
-                <form action=" {% url 'diary:comment_delete' post.id comment.id %}" method="POST"
-                    style="display: inline;">
+                <form action=" {% url 'diary:comment_delete' post.id comment.id %}" method="POST">
                     {% csrf_token %}
                     <input class="comment-edit" type="submit" value="삭제" onclick="return confirm('정말로 삭제하시겠습니까?')">
                 </form>
@@ -134,13 +134,59 @@
                 <!-- reply-button -->
                 <button class="reply-button comment-edit" parent-id="{{ comment.id }}">답글</button>
             </div>
+            <!--reply-form-->
+            <div class="reply-form" id="reply-form-{{ comment.id }}">
+                {% if request.user.is_authenticated %}
+                <form class="reply-form-{{ comment.id }} comment-form" id="reply-control" method="POST"
+                    action="{% url 'diary:comment_reply' post.id comment.id %}">
+                    {% csrf_token %}
+                    {{ comment_form.content }}
+                    <input class="comment-submit material-symbols-outlined" id="reply-submit" type="submit" value="add">
+                </form>
+                {% endif %}
+            </div>
+
+            <!--Reply Comment list-->
+            <div class="reply-list-container">
+                {% if comment.replies.all %}
+                {% for reply in comment.replies.all %}
+                <div class="comment-container" id="reply-container">
+                    <div class="upper-content">
+                        <div class="comment-profile">
+                            {% if comment.writer.profile_img %}
+                            <img class="comment-img" src="{{ reply.writer.profile_img.url }}" alt="">
+                            {% endif %}
+                            <a class="comment-writer"
+                                href="{% url 'accounts:profile' reply.writer.user.profile.user_id %}">
+                                @{{ reply.writer.nickname }}</a>
+                        </div>
+                        <p class="comment-time">{{ reply.created_at|date:"Y.m.d. H:i" }}</p>
+                    </div>
+                    <p class="comment-content">{{ reply.content }}</p>
+                </div>
+
+                <div class="comment-btn">
+                    {% if reply.writer.user == request.user %}
+                    <form action="{% url 'diary:comment_delete' post.id reply.id %}" method="POST">
+                        {% csrf_token %}
+                        <input class="comment-edit" type="submit" value="삭제" onclick="return confirm('정말로 삭제하시겠습니까?')">
+                    </form>
+
+                    <!-- update -->
+                    <a class="comment-edit" href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
 
             {% empty %}
             <p class="no">첫번째 댓글을 써주세요!</p>
             {% endfor %}
+
         </div>
 
-        <!--Form-->
+        <!--Comment Form-->
         <div class="comment-form-container">
             {% if request.user.is_authenticated %}
             <form class="comment-form" action="{% url 'diary:comment_create' post.id %}" method="POST">
@@ -148,12 +194,10 @@
                 {{ comment_form.content }}
                 <input class="comment-submit material-symbols-outlined" type="submit" value="arrow_upward">
             </form>
-
             {% else %}
-            <a href="{% url 'account_login' %}">댓글을 작성하려면 로그인하세요.</a>
+            <a class="require-login" href="{% url 'account_login' %}">댓글을 작성하려면 로그인하세요.</a>
             {% endif %}
         </div>
-
     </div>
 </div>
 {% endblock %}

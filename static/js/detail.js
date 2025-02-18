@@ -1,29 +1,25 @@
 document.addEventListener('DOMContentLoaded', function () {
-    //reply-btn
+    // reply-btn
     const replyButtons = document.querySelectorAll('.reply-button');
 
     replyButtons.forEach(button => {
+        button.innerHTML = "답글"; 
+
         button.addEventListener('click', function () {
-
             const parentId = this.getAttribute('parent-id');
-
             const formDiv = document.getElementById('reply-form-' + parentId);
-            formDiv.style.display = formDiv.style.display === 'none' ? 'block' : 'none';
+
+            // 답글 폼 보이기/숨기기
+            if (formDiv.style.display === 'none' || formDiv.style.display === '') {
+                formDiv.style.display = 'flex';
+                this.innerHTML = "닫기"; 
+            } else {
+                formDiv.style.display = 'none';
+                this.innerHTML = "답글";
+            }
         });
     });
-
 });
-
-//toggle function
-function toggle(id) {
-    const contentDiv = document.getElementById(id);
-
-    if (contentDiv.style.display == "none") {
-        contentDiv.style.display = "block";
-    } else {
-        contentDiv.style.display = "none";
-    }
-}
 
 
 
