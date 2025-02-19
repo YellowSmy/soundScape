@@ -14,8 +14,8 @@ class Diary(models.Model):
     #music info
     video_id = models.CharField(max_length=50, null=True)
     thumbnail_url = models.URLField(default="")
-    music_title = models.CharField(max_length=50, default="알 수 없음")
-    artist = models.CharField(max_length=30, default="알 수 없음")
+    music_title = models.CharField(max_length=50)
+    artist = models.CharField(max_length=30)
 
     #사용자 정보
     writer = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="diaries")

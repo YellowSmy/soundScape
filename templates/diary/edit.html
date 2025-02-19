@@ -2,84 +2,105 @@
 {% load static %}
 
 {% block css %}
+{{ block.super }}
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-<link id="stylesheet-theme" rel="stylesheet" href="{% static 'css/theme/basic.css' %}">
-<link rel="stylesheet" href="{% static 'css/layout/editor.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/common/detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/editor.css' %}">
+
 {% endblock %}
 
 {% block scripts %}
 {{ block.super }}
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="{% static 'js/editor/contentEditor.js' %}"></script>
+
+
 <script src="{% static 'js/music/musicPlayer.js' %}"></script>
 <script src="{% static 'js/music/searchMusic.js' %}"></script>
 <script src="{% static 'js/editor/tempSave.js' %}"></script>
-
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script src="{% static 'js/editor/contentEditor.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<!--video-->
+<div class="upper-container">
 
-<!--search-->
-<div>
-   <input type="text" id="search-input" placeholder="비디오 제목 + 가수" autocomplete="off">
-   <button id="search-btn">Search</button>
-   <div id="youtube-result" style="display: flex; overflow-x: auto;"></div>
 </div>
 
-<!--player-->
-<div id="music-player" style="display: none;">
-   <!--video-->
-   {% if form.instance.video_id %}
-   <div id="player" video-id="{{form.instance.video_id}}"></div>
-
-   {% else %}
-   <div id="player" video-id=""></div>
-   {% endif %}
-
-   <br>
-
-   <!--player-->
-   <div>
-      <button id="playBtn">>></button>
-      <button id="mute">음소거</button>
-      <div class="slider">
-         <input id="volume" type="range" min="1" max="100" value="50">
-         <input id="seeker" type="range" value="0">
+<div class="edit-container">
+   <div class="edit-scrollable-container">
+      <!--search-->
+      <div class="search-container">
+         <input type="text" id="search-input" placeholder="아티스트 + 제목"
+            value="{{form.instance.artist}}{{form.instance.music_title}}" autocomplete="off">
+         <button class="material-symbols-outlined" id="search-btn">search</button>
       </div>
+      <div id="youtube-result"></div>
+
+      <!--player-->
+      <div class="music-container">
+         <div id="music-player" style="display: none;">
+            <!--video-->
+            {% if form.instance.video_id %}
+            <div id="player" video-id="{{form.instance.video_id}}"></div>
+            {% else %}
+            <div id="player" video-id=""></div>
+            {% endif %}
+
+            <!--player-controller-->
+            <div class="player-control">
+               <div class="video-control">
+                  <span class="material-symbols-outlined" id="playBtn">play_arrow</span>
+                  <input id="seeker" type="range" value="0">
+               </div>
+               <div class="volume-control">
+                  <span class="material-symbols-outlined" id="mute">volume_up</span>
+                  <input id="volume" type="range" min="1" max="100" value="50">
+               </div>
+            </div>
+         </div>
+
+      </div>
+
+      <!-- form -->
+      <form id="content-form" method="POST" autocomplete="off">
+         {% csrf_token %}
+         <div id="form-title">
+            {{ form.title }}
+         </div>
+
+         <div class="editor-container">
+            <div id="editor"></div>
+            <textarea name="content" id="toast-editor" style="display: none;">{{ form.content.value }}</textarea>
+         </div>
+
+         <div id="hidden-form">
+            {{ form.video_id }}
+            {{ form.thumbnail_url }}
+            {{ form.music_title }}
+            {{ form.artist }}
+
+            {{ form.theme }}
+         </div>
+
+         <input class="edit-btn" id="diary-submit" type="submit" value="발행">
+         <input class="edit-btn" id="temp-save" type="submit" name="temp-save" value="임시저장">
+
+      </form>
+   </div>
+
+   <!--temp-save-list-btn-->
+   <button class="edit-btn modal-input" id="temp-save-list-btn" data-modal="temp-list">임시저장 목록</button>
+</div>
+
+
+<!--HIDDEN-->
+<div class="modal-container" id="temp-list">
+   <div class="modal" onclick="event.stopPropagation();">
+      <span class="close-btn">&times;</span>
+      <p class="modal-title">임시저장 목록</p>
+      <div id="temp-save-list"></div>
+      <p class="warning">발행한 글을 임시저장하면 글이 숨겨집니다.</p>
    </div>
 </div>
 
-<!--select theme-->
-<div id="theme-container">
-   <button onclick="changeTheme('basic')">Default</button>
-   <button onclick="changeTheme('rock')">Rock</button>
-   <button onclick="changeTheme('jazz')">Jazz</button>
-   <button onclick="changeTheme('ballad')">Ballad</button>
-</div>
-
-<!-- form -->
-<form id="content-form" method="POST" autocomplete="off">
-   {% csrf_token %}
-   <div>
-      {{ form.title }}
-      <div id="editor"></div>
-      <textarea name="content" id="toast-editor" style="display: none;">{{ form.content.value }}</textarea>
-   </div>
-
-   <div id="hidden-form">
-      {{ form.video_id }}
-      {{ form.thumbnail_url }}
-      {{ form.music_title }}
-      {{ form.artist }}
-
-      {{ form.theme }}
-   </div>
-   <input type="submit" value="발행">
-   <input type="submit" id="temp-save" name="temp-save" value="임시저장">
-</form>
-
-<!--temp-save-->
-<button id="temp-save-list-btn">Search</button>
-<div id="temp-save-list"></div>
 {% endblock %}

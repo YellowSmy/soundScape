@@ -13,19 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const tempListDiv = document.getElementById("temp-save-list");
             if (data.html) {
                 tempListDiv.innerHTML = data.html
-
-                //close
-                const closeBtn = document.getElementById("close-btn")
-                const showBtn =  document.getElementById("temp-save-list-btn")
-
-
-                closeBtn.addEventListener("click", () => {
-                    tempListDiv.style.display = "none";
-                    showBtn.style.display = "block"; 
-                });
-
-                showBtn.style.display = "none";
-                tempListDiv.style.display = "block"; 
             }
         })
         .catch(error => {

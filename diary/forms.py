@@ -11,6 +11,12 @@ class DiaryForm(forms.ModelForm):
         exclude = ['writer']
 
         widgets = {
+            'title': TextInput(attrs={
+                'class': "form-title",
+                'placeholder': '제목',
+                'autocomplete' : 'off'
+            },),
+
             "video_id": forms.HiddenInput(),
             "thumbnail_url": forms.HiddenInput(),
             "music_title": forms.HiddenInput(),
@@ -32,5 +38,6 @@ class CommentForm(forms.ModelForm):
             'content': TextInput(attrs={
                 'class': "form-control",
                 'placeholder': '댓글을 입력하세요...',
+                'autocomplete' : 'off'
             },)
         }

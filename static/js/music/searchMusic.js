@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
                data.results.forEach(video => {
                   const musicDiv = document.createElement("div");
                   musicDiv.className = "music-div";
-                  musicDiv.innerHTML = `<img class="thumnbnail" src="${video.thumbnail}" alt="${video.title}"></img> 
+                  musicDiv.innerHTML = `<img class="thumbnail" src="${video.thumbnail}" alt="${video.title}"></img> 
                                         <p class="title">${video.title}</p>
                                         <button type="button" class="select-btn" style="display:none" 
                                                 onclick="selectVideo('${video.videoId}','${video.thumbnail}'); selectMusicInfo('${data.info.music_title}','${data.info.artist}')">
@@ -59,8 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
    // video info. 
    document.getElementById("id_video_id").value = videoId;
    document.getElementById("id_thumbnail_url").value = thumbnailURL;
-
-   alert('Select Complete.');
+   
    loadVideo(videoId);
 }
 

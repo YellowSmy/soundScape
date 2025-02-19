@@ -4,10 +4,8 @@
 
 {% block css %}
 {{ block.super }}
-{% with theme_path='css/theme/'|add:post.theme|add:'.css' %}
-<link id="stylesheet-theme" rel="stylesheet" href="{% static theme_path %}">
 <link rel="stylesheet" href="{% static 'css/common/detail.css' %}">
-{% endwith %}
+
 {% endblock %}
 
 {% block scripts %}
