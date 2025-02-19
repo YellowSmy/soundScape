@@ -5,33 +5,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <!-- Title -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/common/navigation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/authentication/auth.css' %}">
+
     <title>로그인</title>
 </head>
 
 <body>
-    <h1>로그인</h1>
+    <p id="title">환영합니다</p>
+
+    <!--home-->
     <div>
-        <a href="{% url 'account_signup' %}">회원가입</a>
-        <form method="POST" action="{% url 'accounts:guest' %}">
-            {% csrf_token %}
-            <input type="submit" value="게스트 로그인">
-        </form>
+        <a class="material-symbols-outlined icon" id="home" href="{% url 'diary:index' %}">home</a>
     </div>
 
-    <div>
+    <div class="under-container">
+        <!--form-->
         <form method="post" action="{% url 'account_login' %}">
             {% csrf_token %}
-            {{ form.login }}
-            {{ form.password }}
-            {{ form.remember }}
-            <button type="submit">로그인</button>
-            <br>
-            <a href="{% url 'account_reset_password' %}">비밀번호를 까먹음?</a>
+
+            <div class="form-container">
+                {{ form.login }}
+                {{ form.password }}
+            </div>
+
+            <!--error-->
+            <div class="error-container">
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-error">
+                    <p>{{ error|escape }}</p>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-error">
+                    <p>{{ error|escape }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <button class="submit" type="submit">로그인</button>
+
+            <div class="option-container">
+                <div class="auto-login-container">
+                    {{ form.remember }}
+                    <p>자동 로그인 설정</p>
+                </div>
+
+                <a class="forgot-pw" href="{% url 'account_reset_password' %}">비밀번호를 잊으셨나요?</a>
+            </div>
         </form>
+
+        <div class="line"></div>
+
+        <!--href link-->
+        <div class="href-container">
+            <a class="submit" id="signup-btn" href="{% url 'account_signup' %}">회원가입</a>
+            <form method="POST" action="{% url 'accounts:guest' %}">
+                {% csrf_token %}
+                <input class="submit" id="guest-login" type="submit" value="게스트 로그인">
+            </form>
+        </div>
+    </div>
+
+    <div class="notice">
+        <p>게스트 로그인은 2주동안 사용할 수 있습니다</p>
+        <p>게스트의 게시글 작성은 3개로 제한되며, 프로필 수정이 불가능합니다.</p>
     </div>
 </body>
+
+
 
 </html>

@@ -6,37 +6,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <!-- Title -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/common/navigation.css' %}">
+    <link rel="stylesheet" href="{% static 'css/authentication/auth.css' %}">
+
     <title>회원가입</title>
 </head>
 
 <body>
-    <h1>회원가입</h1>
+    <p id="title">회원가입</p>
+
+    <!--home-->
     <div>
-        <a href="{% url 'account_login' %}">로그인</a>
-        <a href="{% url 'account_signup' %}">회원가입</a>
+        <a class="material-symbols-outlined icon" id="home" href="{% url 'diary:index' %}">home</a>
     </div>
 
-    <div>
+    <div class="under-container">
         <form method="post" action="{{ action_url }}">
             {% csrf_token %}
-            {{ form.email }} <br>
-            {{ form.password1 }} <br>
-            {{ form.password2 }} <br>
-            <div class="helptext">
+            <div class="form-container">
+                {{ form.email }}
+                {{ form.password1 }}
+                {{ form.password2 }}
+            </div>
+
+            <!--error-->
+            <div class="error-container">
+                {% if form.errors %}
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="alert alert-error">
+                    <p>{{ error|escape }}</p>
+                </div>
+                {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-error">
+                    <p>{{ error|escape }}</p>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <button class="submit" type="submit">회원가입</button>
+
+            <div class="notice" id="notice-pw">
                 <p>
                     다른 개인 정보와 유사한 비밀번호는 사용할 수 없습니다. <br>
                     비밀번호는 최소 8자 이상이어야 합니다. <br>
                     통상적으로 자주 사용되는 비밀번호는 사용할 수 없습니다. <br>
                     숫자로만 이루어진 비밀번호는 사용할 수 없습니다. <br>
                 </p>
-                <a href="{% url 'account_reset_password' %}">비밀번호를 까먹음?</a>
             </div>
-            <button type="submit">회원가입</button>
         </form>
     </div>
+
+
+
+
 </body>
 
 </html>
