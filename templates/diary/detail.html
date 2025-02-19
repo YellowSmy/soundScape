@@ -127,7 +127,6 @@
                     <input class="comment-edit" type="submit" value="삭제" onclick="return confirm('정말로 삭제하시겠습니까?')">
                 </form>
                 <!-- update -->
-                <a class="comment-edit" href="{% url 'diary:comment_update' post.id comment.id %}">수정</a>
                 {% endif %}
                 <!-- reply-button -->
                 <button class="reply-button comment-edit" parent-id="{{ comment.id }}">답글</button>
@@ -169,9 +168,6 @@
                         {% csrf_token %}
                         <input class="comment-edit" type="submit" value="삭제" onclick="return confirm('정말로 삭제하시겠습니까?')">
                     </form>
-
-                    <!-- update -->
-                    <a class="comment-edit" href="{% url 'diary:comment_update' post.id reply.id %}">수정</a>
                     {% endif %}
                 </div>
                 {% endfor %}
