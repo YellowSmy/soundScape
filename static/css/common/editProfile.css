@@ -1,0 +1,138 @@
+/*layout*/
+.edit-container {
+    position: absolute;
+    width: 100%;
+    
+    top: 15vh;
+    z-index: 10;
+}
+.edit-scrollable-container {
+    width: 100%;
+    height: 100%;
+    margin-top: 10.5vh;
+}
+
+/*form*/
+
+#id_nickname {
+    border: 0;
+    background-color: transparent;
+
+    position: absolute;
+    width: 205px;
+    height: 47px;
+
+    display: flex;
+    align-items: center;
+
+    margin-left: 98px;
+    margin-top: 3.9vh;
+    top: 0;
+    left: 0;
+
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 23px;
+
+    color: #000000;
+    z-index: 1000;
+}
+#id_bio {
+    border: 0;
+    background-color: transparent;
+
+    position: absolute;
+    margin-top: 3px;
+    margin-left: 101px;
+    
+    font-family: 'NanumSquareRound';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    
+    color: #000000;
+}
+
+/*img*/
+#current-img {
+    position: absolute;
+    top: 0;
+    margin-top: 4vh;
+}
+
+/*change-img-form*/
+#change-img-title {
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    margin-top: 140px;
+    margin-left: 15px;
+}
+#preview {
+
+    width: 200px;
+    height: 200px;
+
+    position: absolute;
+    top: 40vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #D9D9D9;
+    border-radius: 50%;
+
+}
+
+#img-update-form {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    width: 100%;
+
+    position: absolute;
+    top: 60vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+input[type="file"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+.custom-file-upload {
+    display: inline-block;
+
+    padding: 8px 16px;
+    border-radius: 10px;
+
+    background: #D9D9D9;
+
+    text-align: center;
+    font-family: 'NanumSquareRound';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 16px;
+    color: #000000;
+    
+}
+
+
+/*button*/
+#submit-btn {
+    width: 40px;
+    top: auto;
+    bottom: 0;
+    right: 0;
+
+    margin-bottom: 60px;
+    z-index: 1000;
+}

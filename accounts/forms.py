@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ImageField, FileInput
+from django.forms import ImageField, FileInput,TextInput
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -21,6 +21,21 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['nickname', 'profile_img', 'bio']
+
+        widgets = {
+            'nickname': TextInput(attrs={
+                'placeholder': '닉네임..',
+                'autocomplete' : 'off',
+                'autofocus' : True,
+                'spellcheck' : False,
+            },),
+
+            'bio': TextInput(attrs={
+                'placeholder': '자기소개..',
+                'autocomplete' : 'off',
+                'spellcheck' : False,
+            },)
+        }
 
         labels = {
             'nickname' : "닉네임",

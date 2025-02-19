@@ -14,7 +14,9 @@ class DiaryForm(forms.ModelForm):
             'title': TextInput(attrs={
                 'class': "form-title",
                 'placeholder': '제목',
-                'autocomplete' : 'off'
+                'autocomplete' : 'off',
+                'autofocus' : True,
+                'spellcheck' : False,
             },),
 
             "video_id": forms.HiddenInput(),

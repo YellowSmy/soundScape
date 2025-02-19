@@ -1,38 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/common/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/common/editProfile.css' %}">
+{% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 <script src="{% static 'js/editor/preview.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<div>
-    <h5>프로필</h5>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div>
-            {{ form.nickname }} <br>
-            {{ form.bio }}
-        </div>
-        <br>
-        <div>
-            {% if form.instance.profile_img %}
-            <div>
-                <!--only update image-->
-                currentimage: <br>
-                <img src="{{ form.instance.profile_img.url }}" alt="이미지"><br>
-            </div>
-            {% endif %}
+<div class="upper-container">
+</div>
 
-            <div>
-                {{ form.profile_img }} <br>
-                <img id="preview">
+<div class="edit-container">
+    <div class="edit-scrollable-container">
+        <!--edit form-->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.nickname }}
+            {{ form.bio }}
+
+            <!--Image-->
+            {% if form.instance.profile_img %}
+            <!--current image-->
+            <img class="img" id="current-img" src="{{ form.instance.profile_img.url }}" alt="이미지">
+            {% endif %}
+            <!--changing image-->
+            <p id="change-img-title">사진 변경</p>
+            <img id="preview">
+            <div id="img-update-form">
+                <label for="id_profile_img" class="custom-file-upload">파일 선택</label>
+                {{ form.profile_img }}
             </div>
-        </div>
-        <br>
-        <button type="submit">{{submitText}}</button>
-    </form>
+
+
+
+            <button class="edit-btn" id="submit-btn" type="submit">{{submitText}}</button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

@@ -28,7 +28,8 @@
         {% else %}
         <div class="img"></div>
         {% endif %}
-        <p id="nickname">{{ user_profile.nickname|default:"로그인하세요." }}</p>
+        <a id="nickname" href="{% url 'accounts:profile' user_profile.user_id %}">
+            {{ user_profile.nickname|default:"로그인하세요." }}</p>
     </div>
 
     {% for post in posts %}
