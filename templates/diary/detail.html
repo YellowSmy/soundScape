@@ -24,7 +24,7 @@
     <!--CRUD Button-->
     {% if post.writer.user == request.user %}
     <a class="edit-btn" id="second-edit" href="{% url 'diary:update' post.id %}">수정</a>
-    <a class="edit-btn" href="{% url 'diary:delete' post.id %}" onclick="return confirm('Really Delete?')">
+    <a class="edit-btn" href="{% url 'diary:delete' post.id %}" onclick="return confirm('정말로 삭제하시겠습니까?')">
         삭제
     </a>
     {% endif %}

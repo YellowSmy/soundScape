@@ -91,12 +91,12 @@
 
 /*error layout*/
 .error-container {
-    position: absolute;
+    position: relative;
     width: 100%;
-    z-index: 1000;
+    z-index: 100;
 
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     text-align: center;
 }
 .alert-error {
@@ -224,6 +224,8 @@
     top: 0;
     right: 0;
     margin: 7px;
+
+    z-index: 1000;
 }
 
 .submit {

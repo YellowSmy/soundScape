@@ -203,7 +203,7 @@ p {
 #title {
     text-decoration: none;
 
-    width: 78px;
+    width: 200px;
     height: 23px;
 
     font-family: 'NanumSquareRound';
@@ -216,6 +216,7 @@ p {
 }
 #artist {
     margin-top: 5px;
+    margin-left: 0px;
 
     width: 233.39px;
     height: 16.76px;

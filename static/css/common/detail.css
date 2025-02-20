@@ -17,12 +17,13 @@
 
 .under-container {
     position: absolute;
-    top: 58%;
+    top: 58vh;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
     height: 63%;
 
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 
